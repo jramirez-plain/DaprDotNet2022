@@ -9,23 +9,9 @@ on:
     branches: [ "main" ]
     
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore src/CapacityPlanner/CapacityPlanner.csproj
-    - name: Build
-      run: dotnet build --no-restore src/CapacityPlanner/CapacityPlanner.csproj
-#    - name: Test
-#      run: dotnet test --no-build --verbosity normal
 
   docker:
-    needs: build
+    # needs: build
     runs-on: ubuntu-latest    
     env:
       appId: 'capacityplanner'
@@ -38,5 +24,6 @@ jobs:
         password: ${{ secrets.ACR_PASSWORD }}    
 
     - run: |
-        docker build -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}  -f src/CapacityPlanner/Dockerfile src/. 
+        pwd
+        docker build -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}  -f src/CapacityPlanner/Dockerfile . 
         docker push jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}
