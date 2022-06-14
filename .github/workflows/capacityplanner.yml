@@ -38,5 +38,5 @@ jobs:
         password: ${{ secrets.ACR_PASSWORD }}
 
     - run: |
-        docker build -f src\CapacityPlanner\Dockerfile .\src\ -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }} 
+        docker build -f src/CapacityPlanner/Dockerfile ./src/ -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }} 
         docker push jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}
