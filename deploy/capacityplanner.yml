@@ -1,0 +1,38 @@
+kind: containerapp
+location: northeurope
+name: capacityplanner
+resourceGroup: DotNet2022
+type: Microsoft.App/containerApps
+tags:
+properties:
+  managedEnvironmentId: /subscriptions/44faf07a-6afd-461b-a664-3461a150f26e/resourceGroups/DotNet2022/providers/Microsoft.App/managedEnvironments/DaprApps
+  configuration:
+    activeRevisionsMode: Single
+    secrets:
+      - name: myregistrypassword
+        value: "HUAYrAX5UbLwAn6p=eHRNWmQ48wswY8m"
+    registries:
+      - server: jramgar.azurecr.io
+        username: jramgar
+        passwordSecretRef: myregistrypassword
+    dapr:
+      appId: capacityplanner
+      appPort: 80
+      appProtocol: http
+      enabled: true
+  template:
+    revisionSuffix: rev03
+    containers: 
+      - image: jramgar.azurecr.io/capacityplanner:latest        
+        name: capacityplanner
+        env:
+          - name: HTTP_PORT
+            value: 80
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+    resources:
+      cpu: 1
+      memory: 2Gi
+    scale:
+      minReplicas: 1
+      maxReplicas: 1

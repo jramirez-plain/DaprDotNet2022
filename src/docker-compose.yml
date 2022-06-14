@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  capacityplanner:
+    image: ${DOCKER_REGISTRY-}capacityplanner
+    build:
+      context: .
+      dockerfile: CapacityPlanner/Dockerfile

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapacityPlanner", "CapacityPlanner\CapacityPlanner.csproj", "{E86CDD56-CED8-48D2-A471-0AD2B513F36F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CapacityPlanner", "CapacityPlanner\CapacityPlanner.csproj", "{E86CDD56-CED8-48D2-A471-0AD2B513F36F}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{C3CC27D6-1F94-4222-BBE8-C98F80EA1DAD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{E86CDD56-CED8-48D2-A471-0AD2B513F36F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E86CDD56-CED8-48D2-A471-0AD2B513F36F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E86CDD56-CED8-48D2-A471-0AD2B513F36F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3CC27D6-1F94-4222-BBE8-C98F80EA1DAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3CC27D6-1F94-4222-BBE8-C98F80EA1DAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3CC27D6-1F94-4222-BBE8-C98F80EA1DAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3CC27D6-1F94-4222-BBE8-C98F80EA1DAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
