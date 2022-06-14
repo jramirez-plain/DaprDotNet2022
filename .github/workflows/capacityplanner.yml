@@ -17,16 +17,12 @@ jobs:
       appId: 'capacityplanner'
       appRev: 'latest' #${{ github.sha }}
     steps:
+    - uses: actions/checkout@v3
     - uses: azure/docker-login@v1
       with:
-        login-server: yourACRname.azurecr.io
+        login-server: jramgar.azurecr.io
         username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}    
-    - uses: actions/checkout@v3
+        password: ${{ secrets.ACR_PASSWORD }}        
     - run: |
-        pwd
-        ls -la
-        ls -la ./src/
-        ls -la ./src/CapacityPlanner
         docker build -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }} -f src/CapacityPlanner/Dockerfile ./src/. 
         docker push jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}
