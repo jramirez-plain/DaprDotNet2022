@@ -3,9 +3,11 @@ name: capacityplanner
 on:
   push:
     branches: [ "main" ]
-    paths: 
-     - "src/CapacityPlanner"
-     
+    #paths: 
+    # - "src/CapacityPlanner"
+  pull_request:
+    branches: [ "main" ]
+    
 jobs:
   build:
     runs-on: ubuntu-latest
