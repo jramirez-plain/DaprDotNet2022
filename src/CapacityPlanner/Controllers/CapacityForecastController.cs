@@ -14,7 +14,7 @@ namespace CapacityPlanner.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "CreateOccupancyHistoricalForecast")]
+        [HttpGet]
         public async Task<ActionResult<CapacityForecast>> Get(DateTime datetime, CancellationToken cancellationToken)
         {
 

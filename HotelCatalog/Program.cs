@@ -1,23 +1,21 @@
-namespace CapacityPlanner
+namespace HotelCatalog
 {
     public class Program
     {
         public static void Main(string[] args)
         {
+            var builder = WebApplication.CreateBuilder(args);
 
             var configuration = new ConfigurationBuilder()
                  .SetBasePath(Directory.GetCurrentDirectory())
                  .AddJsonFile("appsettings.json")
-                 .Build(); 
-            
-            var builder = WebApplication.CreateBuilder(args);
+                 .Build();
 
             // Add services to the container.
 
             builder.Services.AddControllers();
             builder.Services.AddDaprClient();
             builder.Services.AddDaprSidekick(configuration);
-
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
