@@ -84,3 +84,12 @@ We can list or available components in our environment with that command
   az containerapp env dapr-component list --name DaprApps -g DotNet2022 --output table
 ```
 
+## Deploy Capacity Planner
+
+Now that we have an Azure Components App environment ready, we can start deploying our application. There are several ways to deploy, we will use yaml definition files to set up out application and we use az cli to deploy it.
+
+
+``` bash
+  az containerapp create -n capacityplanner -g DotNet2022 --environment DaprApps --yaml .\deploy\capacityplanner.yml
+```
+
