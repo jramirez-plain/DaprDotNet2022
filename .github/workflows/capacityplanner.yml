@@ -22,7 +22,7 @@ jobs:
         login-server: yourACRname.azurecr.io
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}    
-
+    - uses: actions/checkout@v3
     - run: |
         pwd
         ls -la
