@@ -1,3 +1,4 @@
+using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CapacityPlanner.Controllers
@@ -6,17 +7,20 @@ namespace CapacityPlanner.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        private readonly DaprClient _daprClient;
+        private readonly ILogger<WeatherForecastController> _logger;
+
+        public WeatherForecastController(DaprClient daprClient, ILogger<WeatherForecastController> logger)
+        {
+            _daprClient = daprClient;
+            _logger = logger;
+        }
+
+
         private static readonly string[] Summaries = new[]
         {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
+        };
 
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
@@ -28,6 +32,19 @@ namespace CapacityPlanner.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+
+        [HttpGet(Name = "GetSecrets")]
+        public async Task<IEnumerable<string>> GetSecrets()
+        {
+
+            _logger.LogTrace("Secrets Call");
+
+            var secrets = await _daprClient.GetSecretAsync("mysecretstore", "secret");
+
+            return secrets.Select(s => s.ToString());
+
         }
     }
 }
