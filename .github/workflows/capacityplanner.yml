@@ -1,4 +1,4 @@
-name: capacityplanner
+lsname: capacityplanner
 
 on:
   push:
@@ -25,5 +25,6 @@ jobs:
 
     - run: |
         pwd
-        docker build -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}  -f src/CapacityPlanner/Dockerfile . 
+        ls -la
+        docker build -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }} -f src/CapacityPlanner/Dockerfile . 
         docker push jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}
