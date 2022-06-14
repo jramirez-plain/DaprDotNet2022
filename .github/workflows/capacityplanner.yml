@@ -26,5 +26,7 @@ jobs:
     - run: |
         pwd
         ls -la
-        docker build -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }} -f src/CapacityPlanner/Dockerfile ./src 
+        ls -la ./src/
+        ls -la ./src/CapacityPlanner
+        docker build -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }} -f src/CapacityPlanner/Dockerfile ./src/. 
         docker push jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}
