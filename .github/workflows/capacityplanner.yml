@@ -1,4 +1,4 @@
-lsname: capacityplanner
+name: capacityplanner
 
 on:
   push:
