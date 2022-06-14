@@ -35,8 +35,8 @@ jobs:
       with:
         login-server: yourACRname.azurecr.io
         username: ${{ secrets.ACR_USERNAME }}
-        password: ${{ secrets.ACR_PASSWORD }}
+        password: ${{ secrets.ACR_PASSWORD }}    
 
     - run: |
-        docker build -f src/CapacityPlanner/Dockerfile src -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }} 
+        docker build -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}  -f src/CapacityPlanner/Dockerfile src/. 
         docker push jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}
