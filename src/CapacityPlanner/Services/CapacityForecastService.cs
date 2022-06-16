@@ -3,7 +3,7 @@ using Dapr.Client;
 
 namespace CapacityPlanner.Services
 {
-    public class CapacityForecastService : ICapacityForecastService
+    public class CapacityForecastService
     {
         private readonly DaprClient _daprClient;
         private const string CATALOG = "catalog";

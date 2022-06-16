@@ -10,9 +10,9 @@ namespace CapacityPlanner.Controllers
     public class CapacityForecastController : ControllerBase
     {
         private readonly ILogger<CapacityForecastController> _logger;
-        private readonly ICapacityForecastService _capacityForecastService;
+        private readonly CapacityForecastService _capacityForecastService;
 
-        public CapacityForecastController(ICapacityForecastService capacityForecastService, ILogger<CapacityForecastController> logger)
+        public CapacityForecastController(CapacityForecastService capacityForecastService, ILogger<CapacityForecastController> logger)
         {
             _capacityForecastService = capacityForecastService;
             _logger = logger;

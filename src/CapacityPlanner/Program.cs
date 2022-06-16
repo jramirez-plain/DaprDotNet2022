@@ -6,13 +6,13 @@ namespace CapacityPlanner
     {
         public static void Main(string[] args)
         {
+            var builder = WebApplication.CreateBuilder(args);
 
             var configuration = new ConfigurationBuilder()
                  .SetBasePath(Directory.GetCurrentDirectory())
                  .AddJsonFile("appsettings.json")
+                 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
                  .Build(); 
-            
-            var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
 
@@ -21,7 +21,7 @@ namespace CapacityPlanner
 #if DEBUG
             builder.Services.AddDaprSidekick(configuration);
 #endif
-            builder.Services.AddSingleton<ICapacityForecastService, CapacityForecastService>();
+            builder.Services.AddSingleton<CapacityForecastService>();
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

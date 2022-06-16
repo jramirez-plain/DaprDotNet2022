@@ -10,10 +10,10 @@ namespace CapacityPlanner.Controllers
     public class OccupancyReservationTrendController : ControllerBase
     {
         private readonly ILogger<OccupancyReservationTrendController> _logger;
-        private readonly ICapacityForecastService _capacityForecastService;
+        private readonly CapacityForecastService _capacityForecastService;
 
         private double CONFIDENCE_RATE = 0.75;
-        public OccupancyReservationTrendController(ICapacityForecastService capacityForecastService, ILogger<OccupancyReservationTrendController> logger)
+        public OccupancyReservationTrendController(CapacityForecastService capacityForecastService, ILogger<OccupancyReservationTrendController> logger)
         {
             _capacityForecastService = capacityForecastService;
             _logger = logger;

@@ -1,3 +1,5 @@
+using HotelCatalog.Services;
+
 namespace HotelCatalog
 {
     public class Program
@@ -9,6 +11,7 @@ namespace HotelCatalog
             var configuration = new ConfigurationBuilder()
                  .SetBasePath(Directory.GetCurrentDirectory())
                  .AddJsonFile("appsettings.json")
+                 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
                  .Build();
 
             // Add services to the container.
@@ -18,6 +21,7 @@ namespace HotelCatalog
 #if DEBUG
             builder.Services.AddDaprSidekick(configuration);
 #endif
+            builder.Services.AddSingleton<HotelCatalogService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

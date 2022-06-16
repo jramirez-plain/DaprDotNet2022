@@ -1,8 +1,14 @@
 # DaprDotNet2022
 Dapr example for DotNet2022
 
+# Sample
 
-# depoly
+## Send capacity forecast messages:
+``` Bash
+dapr publish --publish-app-id capacityplanner --pubsub servicebus-pubsub --topic capacity-forecast --data '{"specversion" : "1.0", "type" : "com.dapr.cloudevent.sent", "source" : "Historical Forecaster", "subject" : "Forecast", "id" : "someCloudEventId", "time" : "2022-06-28T09:00:00Z", "datacontenttype" : "application/cloudevents+json", "data" : {"date": "2022-07-01T00:00:00Z", "historicalLevel": "5"}}'
+```
+
+# deploy
 
 We need to prepare our az cli to manage Azure Conatiner Apps. To do that we need to add a new extension.
 

@@ -10,10 +10,10 @@ namespace CapacityPlanner.Controllers
     public class OccupancyHistoricalForecastController : ControllerBase
     {
         private readonly ILogger<OccupancyHistoricalForecastController> _logger;
-        private readonly ICapacityForecastService _capacityForecastService;
+        private readonly CapacityForecastService _capacityForecastService;
 
         private double CONFIDENCE_RATE = 0.25;
-        public OccupancyHistoricalForecastController(ICapacityForecastService capacityForecastService, ILogger<OccupancyHistoricalForecastController> logger)
+        public OccupancyHistoricalForecastController(CapacityForecastService capacityForecastService, ILogger<OccupancyHistoricalForecastController> logger)
         {
             _capacityForecastService = capacityForecastService;
             _logger = logger;
