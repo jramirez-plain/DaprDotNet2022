@@ -1,3 +1,5 @@
+using CapacityPlanner.Services;
+
 namespace CapacityPlanner
 {
     public class Program
@@ -16,7 +18,10 @@ namespace CapacityPlanner
 
             builder.Services.AddControllers();
             builder.Services.AddDaprClient();
+#if DEBUG
             builder.Services.AddDaprSidekick(configuration);
+#endif
+            builder.Services.AddSingleton<ICapacityForecastService, CapacityForecastService>();
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

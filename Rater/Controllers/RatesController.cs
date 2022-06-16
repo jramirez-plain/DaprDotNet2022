@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Rater.Models;
+using System.Text;
 
 namespace Rater.Controllers
 {
@@ -14,14 +15,19 @@ namespace Rater.Controllers
             _logger = logger;
         }
 
-        [HttpPost("/cron")]
+        [HttpPost("/rater-cron")]
         public async Task<ActionResult> CreateRatesScheduled(CancellationToken cancellationToken)
         {
             try
             {
+                GenerateRandomError();
                 var from = DateTime.Today.AddDays(1);
                 var to = from.AddMonths(1);
-                await GenerateRates(from, to);
+                var hotels = await GetHotels();
+                foreach (var hotel in hotels)
+                {
+                    await GenerateRates(hotel, from, to);
+                }
                 return Ok();
             }
             catch
@@ -32,24 +38,13 @@ namespace Rater.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateRate([FromBody]RateCreationRequest request)
+        public async Task<ActionResult> CreateRate([FromBody] RateCreationRequest request)
         {
-            await GenerateRates(request.HotelCode, request.Date, request.Date);
-            //todo: To test: In order to tell Dapr that the event was not processed correctly in your application and schedule it for redelivery, return any response other than 200 OK.For example, a 500 Error.
-            //var rnd = Random.Shared.Next(0, 1);
-            //return Convert.ToBoolean(rnd) ? Ok() : Conflict();
+            var hotel = await GetHotel(request.HotelCode);
+            await GenerateRates(hotel, request.Date, request.Date);
+
             throw new NotImplementedException();
 
-        }
-
-        private Task GenerateRates(string hotelCode, DateTime from, DateTime to)
-        {
-            for (var current = from; current <= to; current.AddDays(1))
-            { 
-
-            }
-            var range = to..from;
-            foreach (to..)
         }
 
         private void GenerateRandomError()
@@ -61,12 +56,28 @@ namespace Rater.Controllers
             }
         }
 
-        private async Task<Rate> CalculateRate(string hotelCode, DateTime date)
+        private async Task GenerateRates(HotelInfo hotel, DateTime from, DateTime to)
         {
-            var hotelInfo = await GetHotelInformation(hotelCode);
-            var capacity = await GetHotelCapacityForecast(hotelCode);
+            var rates = await CalculateRates(hotel, from, to);
+            await SendRatesMail(hotel, rates);
 
-            var baseRate = hotelInfo.BaseRate;
+        }
+
+        private async Task<IEnumerable<Rate>> CalculateRates(HotelInfo hotel, DateTime from, DateTime to)
+        {
+            var rates = new List<Rate>();
+            for (var current = from; current <= to; current.AddDays(1))
+            {
+                rates.Add(await CalculateRate(hotel, current));
+            }
+            return rates;
+        }
+
+        private async Task<Rate> CalculateRate(HotelInfo hotel, DateTime date)
+        {
+            var capacity = await GetHotelCapacityForecast(hotel.Code, date);
+
+            var baseRate = hotel.BaseRate;
             var desviation = capacity.OccupancyPercentage - 0.5;
             var desviationMultiplier = desviation / 2;
             var confidenceRate = capacity.ConfidenceRate;
@@ -75,14 +86,36 @@ namespace Rater.Controllers
             return new Rate(date, rate);
         }
 
-        private Task<HotelInfo> GetHotelInformation(string hotelCode)
-        { 
+        private Task<IEnumerable<HotelInfo>> GetHotels()
+        {
             throw new NotImplementedException();
         }
 
-        private Task<CapacityForecast> GetHotelCapacityForecast(string hotelCode)
+        private Task<HotelInfo> GetHotel(string hotelCode)
         {
             throw new NotImplementedException();
+        }
+
+        private Task<CapacityForecast> GetHotelCapacityForecast(string hotelCode, DateTime date)
+        {
+            throw new NotImplementedException();
+        }
+
+        private Task SendRatesMail(HotelInfo hotel, IEnumerable<Rate> rates)
+        {
+            var body = GenerateMailBody(hotel, rates);
+            throw new NotImplementedException();
+        }
+
+        private string GenerateMailBody(HotelInfo hotel, IEnumerable<Rate> rates)
+        {
+            var textBuilder = new StringBuilder();
+            textBuilder.AppendLine($"Rates for hotel {hotel.Name}");
+            foreach (var rate in rates)
+            {
+                textBuilder.AppendLine($"Date {rate.Date}: {rate.Price}€");
+            }
+            return textBuilder.ToString();
         }
     }
 }

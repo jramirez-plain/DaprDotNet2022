@@ -2,6 +2,8 @@
 {
     public class HotelInfo
     {
+        public string Name { get; set; }
+        public string Code { get; set; }
         public double BaseRate { get; set; }
         public int Rating { get; set; }
         public int RoomNumber { get; set; }

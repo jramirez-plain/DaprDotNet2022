@@ -1,4 +1,6 @@
 using CapacityPlanner.Models;
+using CapacityPlanner.Services;
+using Dapr;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CapacityPlanner.Controllers
@@ -8,36 +10,28 @@ namespace CapacityPlanner.Controllers
     public class OccupancyReservationTrendController : ControllerBase
     {
         private readonly ILogger<OccupancyReservationTrendController> _logger;
+        private readonly ICapacityForecastService _capacityForecastService;
 
         private double CONFIDENCE_RATE = 0.75;
-        public OccupancyReservationTrendController(ILogger<OccupancyReservationTrendController> logger)
+        public OccupancyReservationTrendController(ICapacityForecastService capacityForecastService, ILogger<OccupancyReservationTrendController> logger)
         {
+            _capacityForecastService = capacityForecastService;
             _logger = logger;
         }
 
-        [HttpPost(Name = "CreateOccupancyReservationTrend")]
+        [Topic("servicebus-pubsub", "capacity-forecast", "event.data.type = 'reservations'", 2)]
+        [HttpPost]
         public async Task Create(OccupancyReservationTrend reservationTrend, CancellationToken cancellationToken)
         {
             var capacityForecastValue = await GetCapacityForecastValue(reservationTrend, cancellationToken);
             var capacityForecast = new CapacityForecast(capacityForecastValue, CONFIDENCE_RATE);
-            await SaveCapacityForecast(capacityForecast, cancellationToken);
+            await _capacityForecastService.SaveCapacityForecast(capacityForecast, cancellationToken);
         }
 
         private async Task<double> GetCapacityForecastValue(OccupancyReservationTrend forecast, CancellationToken cancellationToken)
         {
-            var totalCapacity = await GetTotalCapacity(cancellationToken);
+            var totalCapacity = await _capacityForecastService.GetTotalCapacity(cancellationToken);
             return forecast.EstimatedReservations / totalCapacity;
         }
-
-        private Task SaveCapacityForecast(CapacityForecast capacityForecast, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        private Task<int> GetTotalCapacity(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

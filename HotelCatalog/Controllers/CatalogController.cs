@@ -18,24 +18,24 @@ namespace HotelCatalog.Controllers
 
 
         [HttpGet]
-        public Task<ActionResult<IEnumerable<Office>>> Get(CancellationToken cancellationToken)
+        public Task<ActionResult<IEnumerable<Hotel>>> Get(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
         [HttpGet("{id}")]
-        public Office Get(int id)
+        public Hotel Get(int id)
         {
             throw new NotImplementedException();
         }
 
         [HttpPost]
-        public void Post([FromBody] Office office)
+        public void Post([FromBody] Hotel office)
         {
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Office office)
+        public void Put(int id, [FromBody] Hotel office)
         {
         }
 
