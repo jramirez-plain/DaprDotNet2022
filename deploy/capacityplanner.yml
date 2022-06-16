@@ -21,7 +21,7 @@ properties:
       appProtocol: http
       enabled: true
   template:
-    revisionSuffix: rev04
+    revisionSuffix: rev06
     containers: 
       - image: jramgar.azurecr.io/capacityplanner:latest        
         name: capacityplanner
