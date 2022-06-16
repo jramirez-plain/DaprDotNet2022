@@ -30,5 +30,16 @@ namespace CapacityPlanner.Controllers
 
             return Ok(value);
         }
+
+
+        [HttpPut]
+        public async Task<IActionResult> Set(string key, string value)
+        {
+            await _daprClient.SaveStateAsync<string>(STATESTORE, key, value);
+
+            _logger.LogTrace($"Update state store: key {key} - value {value}");
+
+            return Ok(value);
+        }
     }
 }
