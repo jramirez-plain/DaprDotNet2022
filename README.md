@@ -81,7 +81,8 @@ For example we have a state component based on keyvault, like that:
 To create our new component, we will use the yaml definition directly with az cli tu have available that component dor  our applications
 
 ``` Bash
-  az containerapp env dapr-component set --name DaprApps -g DotNet2022 --dapr-component-name mysecretstore --yaml .\deploy\kvsecretcomponent.yaml
+  az containerapp env dapr-component set --name DaprApps -g DotNet2022 --dapr-component-name mysecretstore --yaml .\deploy\mysecretstore.yaml
+  az containerapp env dapr-component set --name DaprApps -g DotNet2022 --dapr-component-name mystatestore --yaml .\deploy\mystatestore.yaml
 ``` 
 
 We can list or available components in our environment with that command
