@@ -100,3 +100,9 @@ Now that we have an Azure Components App environment ready, we can start deployi
   az containerapp create -n capacityplanner -g DotNet2022 --environment DaprApps --yaml .\deploy\capacityplanner.yml
 ```
 
+If we want to access to the service, we need to enable an ingress, that could be internal or external and we need a target port for the ingress
+
+```bash
+  az containerapp ingress enable -n capacityplanner -g DotNet2022 --type internal --target-port 80
+``` 
+
