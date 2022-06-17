@@ -7,6 +7,7 @@
         public string Address { get; set; }
         public string CountryCode { get; set; }
         public double BaseRate { get; set; }
+        public string Email { get; set; }
         public int Rating { get; set; }
         public int RoomNumber { get; set; }
         public bool? HasSwimmingPool { get; set; }

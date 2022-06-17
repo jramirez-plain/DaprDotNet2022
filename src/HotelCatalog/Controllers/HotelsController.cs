@@ -6,13 +6,13 @@ namespace HotelCatalog.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class CatalogController : ControllerBase
+    public class HotelsController : ControllerBase
     {
 
         private readonly HotelCatalogService _hotelCatalogService;
-        private readonly ILogger<CatalogController> _logger;
+        private readonly ILogger<HotelsController> _logger;
 
-        public CatalogController(HotelCatalogService hotelCatalogService, ILogger<CatalogController> logger)
+        public HotelsController(HotelCatalogService hotelCatalogService, ILogger<HotelsController> logger)
         {
             _logger = logger;
             _hotelCatalogService = hotelCatalogService;
@@ -20,14 +20,14 @@ namespace HotelCatalog.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> Get(string countryCode, CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetList([FromQuery]string countryCode, CancellationToken cancellationToken)
         {
-            var hotels = await _hotelCatalogService.GetHotelsByCountry(countryCode, cancellationToken);
+            var hotels = await _hotelCatalogService.GetHotels(countryCode, cancellationToken);
             return Ok(hotels);
         }
 
         [HttpGet("{code}")]
-        public async Task<ActionResult<Hotel>> GetFiltered(string code, CancellationToken cancellationToken)
+        public async Task<ActionResult<Hotel>> Get(string code, CancellationToken cancellationToken)
         {
             var hotel = await _hotelCatalogService.GetHotel(code, cancellationToken);
             return Ok(hotel);

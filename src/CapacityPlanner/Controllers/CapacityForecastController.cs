@@ -21,10 +21,10 @@ namespace CapacityPlanner.Controllers
         [HttpGet("~/hotels/{hotelCode}/capacityForecasts/{date}")]
         public async Task<ActionResult<CapacityForecast>> Get(string hotelCode, DateTime date, CancellationToken cancellationToken)
         {
-            var capacityForecast = await _capacityForecastService.RetrieveCapacityForecast(date, cancellationToken);
+            var capacityForecast = await _capacityForecastService.RetrieveCapacityForecast(hotelCode, date, cancellationToken);
             if (capacityForecast is null)
             {
-                capacityForecast = CapacityForecast.Default(hotelCode);
+                capacityForecast = CapacityForecast.Default(hotelCode, date);
             }
             return Ok(capacityForecast);
         }

@@ -1,0 +1,22 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: cosmosdb-state
+spec:
+  type: state.azure.cosmosdb
+  version: v1
+  metadata:
+  - name: url
+    value: https://demodaprcrd.documents.azure.com:443/
+  - name: masterKey
+    secretKeyRef:
+      name: cosmosdbMasterKey
+      key:  cosmosdbMasterKey
+  - name: database
+    value: catalog
+  - name: collection
+    value: hotels
+auth:
+  secretStore: localsecretstore
+scopes:
+  - catalog

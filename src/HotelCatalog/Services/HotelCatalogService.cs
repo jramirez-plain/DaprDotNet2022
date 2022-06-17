@@ -7,7 +7,7 @@ namespace HotelCatalog.Services
     public class HotelCatalogService
     {
         private readonly DaprClient _daprClient;
-        private string STORE_NAME = "blobstorage-state";
+        private string STORE_NAME = "cosmosdb-state"; //"redis-state"; //"blobstorage-state";
         public HotelCatalogService(DaprClient daprClient)
         {
             _daprClient = daprClient;
@@ -23,14 +23,21 @@ namespace HotelCatalog.Services
              return _daprClient.SaveStateAsync(STORE_NAME, hotel.Code, hotel, cancellationToken: cancellationToken);
         }
 
-        public async Task<IEnumerable<Hotel>> GetHotelsByCountry(string countryCode, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Hotel>> GetHotels(string countryCode, CancellationToken cancellationToken)
         {
-            var query = @$"
+            var jsonQuery = @$"
+            {{
                 ""filter"": {{
                     ""EQ"": {{ ""countryCode"": ""{countryCode}""}}
                 }}
             }}";
-            var queryResponse =  await _daprClient.QueryStateAsync<Hotel>(STORE_NAME, query, cancellationToken: cancellationToken);
+
+            var metaproperties = new Dictionary<string, string>
+            {
+                ["queryIndexName"] = "countryIndex"
+            };
+
+            var queryResponse =  await _daprClient.QueryStateAsync<Hotel>(STORE_NAME, jsonQuery, metaproperties, cancellationToken: cancellationToken);
             return queryResponse.Results.Select(x => x.Data);
         }
     }
