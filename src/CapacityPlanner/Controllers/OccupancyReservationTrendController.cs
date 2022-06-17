@@ -24,13 +24,13 @@ namespace CapacityPlanner.Controllers
         public async Task Create(OccupancyReservationTrend reservationTrend, CancellationToken cancellationToken)
         {
             var capacityForecastValue = await GetCapacityForecastValue(reservationTrend, cancellationToken);
-            var capacityForecast = new CapacityForecast(capacityForecastValue, CONFIDENCE_RATE);
+            var capacityForecast = new CapacityForecast(reservationTrend.HotelCode, capacityForecastValue, CONFIDENCE_RATE);
             await _capacityForecastService.SaveCapacityForecast(capacityForecast, cancellationToken);
         }
 
         private async Task<double> GetCapacityForecastValue(OccupancyReservationTrend forecast, CancellationToken cancellationToken)
         {
-            var totalCapacity = await _capacityForecastService.GetTotalCapacity(cancellationToken);
+            var totalCapacity = await _capacityForecastService.GetTotalCapacity(forecast.HotelCode, cancellationToken);
             return forecast.EstimatedReservations / totalCapacity;
         }
     }

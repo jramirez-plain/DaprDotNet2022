@@ -20,22 +20,23 @@ namespace HotelCatalog.Controllers
 
 
         [HttpGet]
-        public Task<ActionResult<IEnumerable<Hotel>>> Get(CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<Hotel>>> Get(string countryCode, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var hotels = await _hotelCatalogService.GetHotelsByCountry(countryCode, cancellationToken);
+            return Ok(hotels);
         }
 
         [HttpGet("{code}")]
-        public async Task<ActionResult<Hotel>> Get(string code, CancellationToken cancellationToken)
+        public async Task<ActionResult<Hotel>> GetFiltered(string code, CancellationToken cancellationToken)
         {
-            var hotel = await _hotelCatalogService.Get(code, cancellationToken);
+            var hotel = await _hotelCatalogService.GetHotel(code, cancellationToken);
             return Ok(hotel);
         }
 
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] Hotel hotel, CancellationToken cancellationToken)
         {
-            await _hotelCatalogService.Save(hotel, cancellationToken);
+            await _hotelCatalogService.SaveOrUpdateHotel(hotel, cancellationToken);
             return Ok(hotel);
         }
 

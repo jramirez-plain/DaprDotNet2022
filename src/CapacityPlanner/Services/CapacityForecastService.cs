@@ -23,9 +23,8 @@ namespace CapacityPlanner.Services
             throw new NotImplementedException();
         }
 
-        public async Task<int> GetTotalCapacity(CancellationToken cancellationToken)
+        public async Task<int> GetTotalCapacity(string hotelCode, CancellationToken cancellationToken)
         {
-            var hotelCode = "1"; //todo;
             var hotelInformation = await _daprClient.InvokeMethodAsync<HotelInfo>(
                 HttpMethod.Get,
                 CATALOG,

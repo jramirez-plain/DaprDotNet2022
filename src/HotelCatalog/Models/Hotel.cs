@@ -5,6 +5,7 @@
         public string Code { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
+        public string CountryCode { get; set; }
         public double BaseRate { get; set; }
         public int Rating { get; set; }
         public int RoomNumber { get; set; }

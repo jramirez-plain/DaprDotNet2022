@@ -18,13 +18,13 @@ namespace CapacityPlanner.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<CapacityForecast>> Get(DateTime datetime, CancellationToken cancellationToken)
+        [HttpGet("~/hotels/{hotelCode}/capacityForecasts/{date}")]
+        public async Task<ActionResult<CapacityForecast>> Get(string hotelCode, DateTime date, CancellationToken cancellationToken)
         {
-            var capacityForecast = await _capacityForecastService.RetrieveCapacityForecast(datetime, cancellationToken);
+            var capacityForecast = await _capacityForecastService.RetrieveCapacityForecast(date, cancellationToken);
             if (capacityForecast is null)
             {
-                capacityForecast = CapacityForecast.Default();
+                capacityForecast = CapacityForecast.Default(hotelCode);
             }
             return Ok(capacityForecast);
         }
