@@ -16,21 +16,21 @@ spec:
     secretKeyRef:
       name: redisPassword
       key:  redisPassword    
-  - name: queryIndexes
-    value: |
-      [
-        {
-          "name": "countryIndex",
-          "indexes": [
-            {
-              "key": "countryCode",
-              "type": "TEXT"
-            }
-          ]
-        }
-      ]
-  - name: enableTLS
-    value: true
+  #- name: queryIndexes
+  #  value: |
+  #    [
+  #      {
+  #        "name": "countryIndex",
+  #        "indexes": [
+  #          {
+  #            "key": "countryCode",
+  #            "type": "TEXT"
+  #          }
+  #        ]
+  #      }
+  #    ]
+#  - name: enableTLS
+#    value: true
 auth:
   secretStore: localsecretstore
 scopes:
