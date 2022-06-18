@@ -7,7 +7,7 @@ namespace CapacityPlanner.Services
     {
         private readonly DaprClient _daprClient;
         private const string CATALOG = "catalog";
-        private const string CATALOG_METHOD = "catalog";
+        private const string CATALOG_METHOD = "hotels";
         private const string STORE_NAME = "redis-store";
         public CapacityForecastService(DaprClient daprClient)
         {
