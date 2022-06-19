@@ -54,11 +54,9 @@
 		"raterAppImage": "[concat('jramgar.azurecr.io/rater:', parameters('rater_rev'))]",
 
 		"plannerAppName": "capacityplanner",
-		"plannerAppImage": "[concat('jramgar.azurecr.io/capacityplanner:', parameters('planner_rev'))]",
+		"plannerAppImage": "[concat('jramgar.azurecr.io/capacityplanner:', parameters('planner_rev'))]"
 	},
 	"resources": [
-
-		//Azure Monitor Log Workspace
 		{
 			"type": "Microsoft.OperationalInsights/workspaces",
 			"apiVersion": "2021-06-01",
@@ -74,8 +72,7 @@
 				}
 			}
 		},
-
-		//Azure Application Insights
+		
 		{
 			"type": "Microsoft.Insights/components",
 			"apiVersion": "2020-02-02",
@@ -90,8 +87,7 @@
 				"WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName'))]"
 			}
 		},
-
-		//Azure Container Apps Environment
+		
 		{
 			"type": "Microsoft.App/managedEnvironments",
 			"apiVersion": "2022-03-01",
@@ -111,8 +107,8 @@
 				}
 			},
 
-			"resources": [ //1. COMPONENTS
-				//STATE-STORE (COSMOS)
+			"resources": [ 
+				
 				{
 					"type": "daprComponents",
 					"name": "cosmosdb-state",
@@ -151,47 +147,10 @@
 						],
 						"scopes": [ "catalog" ]
 					}
-				},
-
-				//{
-				//  "type": "daprComponents",
-				//  "name": "statestore",
-				//  "apiVersion": "2022-03-01",
-				//  "dependsOn": [
-				//    "[resourceId('Microsoft.App/managedEnvironments/', parameters('environment_name'))]"
-				//  ],
-				//  "properties": {
-				//    "componentType": "state.azure.blobstorage",
-				//    "version": "v1",
-				//    "ignoreErrors": false,
-				//    "initTimeout": "5s",
-				//    "secrets": [
-				//      {
-				//        "name": "storageaccountkey",
-				//        "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts/', parameters('storage_account_name')), '2021-09-01').keys[0].value]"
-				//      }
-				//    ],
-				//    "metadata": [
-				//      {
-				//        "name": "accountName",
-				//        "value": "[parameters('storage_account_name')]"
-				//      },
-				//      {
-				//        "name": "containerName",
-				//        "value": "[parameters('storage_container_name')]"
-				//      },
-				//      {
-				//        "name": "accountKey",
-				//        "secretRef": "storageaccountkey"
-				//      }
-				//    ],
-				//    "scopes": ["nodeapp"]
-				//  }
-				//}
+				}
 			]
 		},
-
-		//Azure Container Apps - Catalog
+		
 		{
 			"type": "Microsoft.App/containerApps",
 			"apiVersion": "2022-03-01",
@@ -216,7 +175,7 @@
 					"registries": [
 						{
 							"server": "jramgar.azurecr.io",
-							"username": "[parameters('acr_username')]"
+							"username": "[parameters('acr_username')]",
 							"passwordSecretRef": "myregistrypassword"
 						}
 					],
