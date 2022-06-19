@@ -70,7 +70,7 @@ namespace Rater.Services
             return _daprClient.InvokeMethodAsync<CapacityForecast>(
                 HttpMethod.Get,
                 CATALOG,
-                $"hotels/{hotelCode}/capacityforecasts/{date}",
+                $"hotels/{hotelCode}/capacityforecasts/{date.ToString("s")}",
                 cancellationToken);
         }
 

@@ -7,6 +7,6 @@ spec:
   version: v1
   metadata:
   - name: schedule
-    value: "15 * * * * *" # valid cron schedule  
+    value: "* 1 * * * *" # valid cron schedule  
 scopes:
   - rater

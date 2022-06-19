@@ -8,7 +8,7 @@ namespace CapacityPlanner.Services
         private readonly DaprClient _daprClient;
         private const string CATALOG = "catalog";
         private const string CATALOG_METHOD = "hotels";
-        private const string STORE_NAME = "redis-store";
+        private const string STORE_NAME = "redis-state";
         public CapacityForecastService(DaprClient daprClient)
         {
             _daprClient = daprClient;
@@ -36,7 +36,7 @@ namespace CapacityPlanner.Services
 
         private record CapacityForecastKey(string hotelCode, DateTime date)
         {
-            public string Key => $"hotelCode={hotelCode}:date={date}";
+            public string Key => $"hotelCode={hotelCode}:date={date.ToString("s")}";
         }
     }
 }
