@@ -16,7 +16,7 @@
 			"defaultValue": "jramgar",
 			"type": "string"
 		},
-		"planner_rev": {
+		"rater_rev": {
 			"type": "string",
 			"defaultValue": "latest"
 		}
@@ -24,15 +24,15 @@
 	"variables": {
 		"environmnetName": "[concat('dotnet2022appenv-', parameters('environment_name'))]",
 
-		"plannerAppName": "capacityplanner",
-		"plannerAppImage": "[concat('jramgar.azurecr.io/capacityplanner:', parameters('planner_rev'))]"
+		"raterAppName": "rater",
+		"raterAppImage": "[concat('jramgar.azurecr.io/rater:', parameters('rater_rev'))]"
 	},
 	"resources": [
 
 		{
 			"type": "Microsoft.App/containerApps",
 			"apiVersion": "2022-03-01",
-			"name": "[variables('plannerAppName')]",
+			"name": "[variables('raterAppName')]",
 			"location": "[parameters('location')]",
 			//"dependsOn": [
 			//	"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
@@ -59,17 +59,17 @@
 					],
 					"dapr": {
 						"enabled": true,
-						"appId": "[variables('plannerAppName')]",
+						"appId": "[variables('raterAppName')]",
 						"appProcotol": "http",
 						"appPort": 80
 					}
 				},
 				"template": {
-					"revisionSuffix": "[parameters('planner_rev')]",
+					"revisionSuffix": "[parameters('rater_rev')]",
 					"containers": [
 						{
-							"image": "[variables('plannerAppImage')]",
-							"name": "[variables('plannerAppName')]",
+							"image": "[variables('raterAppImage')]",
+							"name": "[variables('raterAppName')]",
 							"env": [
 								{
 									"name": "HTTP_PORT",

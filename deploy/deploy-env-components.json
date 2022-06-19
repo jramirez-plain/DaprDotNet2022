@@ -45,33 +45,12 @@
 		"ratercron_expresion": {
 			"type": "string",
 			"defaultValue": "* 1 * * * *"
-		},
-		"catalog_rev": {
-			"type": "string",
-			"defaultValue": "latest"
-		},
-		"rater_rev": {
-			"type": "string",
-			"defaultValue": "latest"
-		},
-		"planner_rev": {
-			"type": "string",
-			"defaultValue": "latest"
 		}
 	},
 	"variables": {
 		"logAnalyticsWorkspaceName": "[concat('dotnet2022logs-', parameters('environment_name'))]",
 		"appInsightsName": "[concat('dotnet2022appins-', parameters('environment_name'))]",
-		"environmnetName": "[concat('dotnet2022appenv-', parameters('environment_name'))]",
-
-		"catalogAppName": "catalog",
-		"catalogAppImage": "[concat('jramgar.azurecr.io/catalog:', parameters('catalog_rev'))]",
-
-		"raterAppName": "rater",
-		"raterAppImage": "[concat('jramgar.azurecr.io/rater:', parameters('rater_rev'))]",
-
-		"plannerAppName": "capacityplanner",
-		"plannerAppImage": "[concat('jramgar.azurecr.io/capacityplanner:', parameters('planner_rev'))]"
+		"environmnetName": "[concat('dotnet2022appenv-', parameters('environment_name'))]"
 	},
 	"resources": [
 		{
@@ -292,6 +271,5 @@
 				}
 			]
 		}
-
 	]
 }
