@@ -13,8 +13,8 @@
 			"type": "securestring"
 		},
 		"acr_username": {
-			"type": "string",
 			"defaultValue": "jramgar",
+			"type": "string"
 		},
 		"cosmos_url": {
 			"type": "string"
