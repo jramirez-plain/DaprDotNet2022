@@ -50,7 +50,11 @@
 	"variables": {
 		"logAnalyticsWorkspaceName": "[concat('dotnet2022logs-', parameters('environment_name'))]",
 		"appInsightsName": "[concat('dotnet2022appins-', parameters('environment_name'))]",
-		"environmnetName": "[concat('dotnet2022appenv-', parameters('environment_name'))]"
+		"environmnetName": "[concat('dotnet2022appenv-', parameters('environment_name'))]",
+
+		"plannerAppName": "capacityplanner",
+		"catalogAppName": "catalog",
+		"raterAppName": "rater"
 	},
 	"resources": [
 		{

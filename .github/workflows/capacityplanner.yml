@@ -27,7 +27,7 @@ jobs:
         docker build -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }} -f src/CapacityPlanner/Dockerfile ./src/. 
         docker push jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}
 
-  CD-ENV:
+  CD:
    # Create infra and publish app
     runs-on: ubuntu-latest
     env:
@@ -55,20 +55,7 @@ jobs:
             servicebus_connectionstring=${{ secrets.AZURE_SERVICEBUS_CONNECTIONSTRING }}
             redis_host=${{ env.redis_host }}
             redis_password=${{ secrets.AZURE_REDIS_PASSWORD }}
-            sendgrid_apikey=${{ secrets.AZURE_SENDGRID_APIKEY }}
-
-
-  CD-APP:
-   # Create infra and publish app
-    runs-on: ubuntu-latest
-    env:      
-      appRev: 'latest' #${{ github.sha }}
-    needs: CD-ENV
-    steps:    
-      - uses: actions/checkout@main
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}        
+            sendgrid_apikey=${{ secrets.AZURE_SENDGRID_APIKEY }} 
       - name: Run ARM deploy
         uses: azure/arm-deploy@v1
         with:
