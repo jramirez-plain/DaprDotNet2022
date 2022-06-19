@@ -115,7 +115,7 @@
 					"name": "cosmosdb-state",
 					"apiVersion": "2022-03-01",
 					"dependsOn": [
-						"[resourceId('Microsoft.App/managedEnvironments/', parameters('environment_name'))]"
+						"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
 					],
 					"properties": {
 						"componentType": "state.azure.cosmosdb",
@@ -158,7 +158,7 @@
 			"name": "[variables('plannerAppName')]",
 			"location": "[parameters('location')]",
 			"dependsOn": [
-				"[resourceId('Microsoft.App/managedEnvironments/', parameters('environment_name'))]"
+				"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
 			],
 			"properties": {
 				"managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments/', parameters('environment_name'))]",
