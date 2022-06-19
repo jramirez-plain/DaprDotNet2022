@@ -98,8 +98,8 @@ namespace Rater.Services
             string BINDING_OPERATION = "create";
             var metadata = new Dictionary<string, string>()
             {
-                ["emailTo"] = from,
-                ["emailFrom"] = to,
+                ["emailTo"] = to,
+                ["emailFrom"] = from,
                 ["subject"] = subject,
             };
             try
