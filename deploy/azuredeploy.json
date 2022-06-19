@@ -123,7 +123,7 @@
 						"initTimeout": "5s",
 						"secrets": [
 							{
-								"name": "cosmosmasterKey",
+								"name": "cosmosmasterkey",
 								"value": "[parameters('cosmos_masterkey')]"
 							}
 						],
@@ -134,7 +134,7 @@
 							},
 							{
 								"name": "masterKey",
-								"secretRef": "cosmosmasterKey"
+								"secretRef": "cosmosmasterkey"
 							},
 							{
 								"name": "database",
