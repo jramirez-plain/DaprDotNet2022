@@ -145,7 +145,7 @@
 								"value": "[parameters('cosmos_collection')]"
 							}
 						],
-						"scopes": [ "catalog" ]
+						"scopes": [ "[variables('plannerAppName')]" ]
 					}
 				}
 			]
@@ -154,7 +154,7 @@
 		{
 			"type": "Microsoft.App/containerApps",
 			"apiVersion": "2022-03-01",
-			"name": "[variables('catalogAppName')]",
+			"name": "[variables('plannerAppName')]",
 			"location": "[parameters('location')]",
 			"dependsOn": [
 				"[resourceId('Microsoft.App/managedEnvironments/', parameters('environment_name'))]"
@@ -181,17 +181,17 @@
 					],
 					"dapr": {
 						"enabled": true,
-						"appId": "[variables('catalogAppName')]",
+						"appId": "[variables('plannerAppName')]",
 						"appProcotol": "http",
 						"appPort": 80
 					}
 				},
 				"template": {
-					"revisionSuffix": "[parameters('catalog_rev')]",
+					"revisionSuffix": "[parameters('planner_rev')]",
 					"containers": [
 						{
-							"image": "[variables('catalogAppImage')]",
-							"name": "[variables('catalogAppName')]",
+							"image": "[variables('plannerAppImage')]",
+							"name": "[variables('plannerAppName')]",
 							"env": [
 								{
 									"name": "HTTP_PORT",
