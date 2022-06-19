@@ -23,7 +23,7 @@ properties:
   template:
     revisionSuffix: rev01
     containers: 
-      - image: jramgar.azurecr.io/capacityplanner:latest        
+      - image: jramgar.azurecr.io/capacityplanner:latest
         name: capacityplanner
         env:
           - name: HTTP_PORT

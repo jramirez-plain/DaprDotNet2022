@@ -10,8 +10,8 @@ on:
   workflow_dispatch:
 jobs:
 
-  docker:
-    # needs: build
+  CI:
+    # Build and publish docker image
     runs-on: ubuntu-latest    
     env:
       appId: 'capacityplanner'
@@ -26,3 +26,19 @@ jobs:
     - run: |
         docker build -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }} -f src/CapacityPlanner/Dockerfile ./src/. 
         docker push jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}
+
+  CD:
+   # Create infra and publish app
+    runs-on: ubuntu-latest
+    steps:    
+      - uses: actions/checkout@main
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}        
+      - name: Run ARM deploy
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RG }}
+          template: ./deploy/azuredeploy.json
+          parameters: environment_name=demo  cosmos_url=https://demodaprcrd.documents.azure.com:443/   
