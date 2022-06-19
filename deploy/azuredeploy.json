@@ -161,7 +161,7 @@
 				"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
 			],
 			"properties": {
-				"managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments/', parameters('environment_name'))]",
+				"managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]",
 				"configuration": {
 					"ingress": {
 						"external": true,
