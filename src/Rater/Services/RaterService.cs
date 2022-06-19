@@ -22,7 +22,7 @@ namespace Rater.Services
         private async Task<IEnumerable<Rate>> CalculateRates(HotelInfo hotel, DateTime from, DateTime to, CancellationToken cancellationToken)
         {
             var rates = new List<Rate>();
-            for (var current = from; current <= to; current.AddDays(1))
+            for (var current = from; current <= to; current = current.AddDays(1))
             {
                 rates.Add(await CalculateRate(hotel, current, cancellationToken));
             }
