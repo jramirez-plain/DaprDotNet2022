@@ -282,7 +282,7 @@
 						"metadata": [
 							{
 								"name": "schedule",
-								"secretRef": "[parameters('ratercron_expresion')]"
+								"value": "[parameters('ratercron_expresion')]"
 							}
 						],
 						"scopes": [
