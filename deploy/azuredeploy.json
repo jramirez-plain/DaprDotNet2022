@@ -44,8 +44,9 @@
 		}
 	},
 	"variables": {
-		"logAnalyticsWorkspaceName": "[concat('logs-', parameters('environment_name'))]",
-		"appInsightsName": "[concat('appins-', parameters('environment_name'))]",
+		"logAnalyticsWorkspaceName": "[concat('dotnet2022logs-', parameters('environment_name'))]",
+		"appInsightsName": "[concat('dotnet2022appins-', parameters('environment_name'))]",
+		"environmnetName": "[concat('dotnet2022appenv-', parameters('environment_name'))]",
 
 		"catalogAppName": "catalog",
 		"catalogAppImage": "[concat('jramgar.azurecr.io/catalog:', parameters('catalog_rev'))]",
@@ -87,11 +88,11 @@
 				"WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName'))]"
 			}
 		},
-		
+
 		{
 			"type": "Microsoft.App/managedEnvironments",
 			"apiVersion": "2022-03-01",
-			"name": "[parameters('environment_name')]",
+			"name": "[variables('environmnetName')]",
 			"location": "[parameters('location')]",
 			"dependsOn": [
 				"[resourceId('Microsoft.Insights/components/', variables('appInsightsName'))]"
@@ -107,8 +108,8 @@
 				}
 			},
 
-			"resources": [ 
-				
+			"resources": [
+
 				{
 					"type": "daprComponents",
 					"name": "cosmosdb-state",
