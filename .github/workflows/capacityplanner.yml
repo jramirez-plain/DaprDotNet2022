@@ -30,6 +30,7 @@ jobs:
   CD:
    # Create infra and publish app
     runs-on: ubuntu-latest
+    needs: CI
     steps:    
       - uses: actions/checkout@main
       - uses: azure/login@v1
@@ -41,4 +42,4 @@ jobs:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./deploy/azuredeploy.json
-          parameters: environment_name=demo  cosmos_url=https://demodaprcrd.documents.azure.com:443/   
+          parameters: environment_name=demo acr_username=${{ secrets.ACR_USERNAME }} acr_password=${{ secrets.ACR_PASSWORD }} cosmos_masterkey=${{ secrets.AZURE_SUBSCRIPTION }} cosmos_url=https://demodaprcrd.documents.azure.com:443/   

@@ -1,0 +1,256 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"environment_name": {
+			"type": "string"
+		},
+		"location": {
+			"defaultValue": "northeurope",
+			"type": "string"
+		},
+		"acr_password": {
+			"type": "securestring"
+		},
+		"acr_username": {
+			"type": "string",
+			"defaultValue": "jramgar",
+		},
+		"cosmos_url": {
+			"type": "string"
+		},
+		"cosmos_masterkey": {
+			"type": "securestring"
+		},
+		"cosmos_database": {
+			"type": "string",
+			"defaultValue": "catalog"
+		},
+		"cosmos_collection": {
+			"type": "string",
+			"defaultValue": "hotels"
+		},
+		"catalog_rev": {
+			"type": "string",
+			"defaultValue": "latest"
+		},
+		"rater_rev": {
+			"type": "string",
+			"defaultValue": "latest"
+		},
+		"planner_rev": {
+			"type": "string",
+			"defaultValue": "latest"
+		}
+	},
+	"variables": {
+		"logAnalyticsWorkspaceName": "[concat('logs-', parameters('environment_name'))]",
+		"appInsightsName": "[concat('appins-', parameters('environment_name'))]",
+
+		"catalogAppName": "catalog",
+		"catalogAppImage": "[concat('jramgar.azurecr.io/catalog:', parameters('catalog_rev'))]",
+
+		"raterAppName": "rater",
+		"raterAppImage": "[concat('jramgar.azurecr.io/rater:', parameters('rater_rev'))]",
+
+		"plannerAppName": "capacityplanner",
+		"plannerAppImage": "[concat('jramgar.azurecr.io/capacityplanner:', parameters('planner_rev'))]",
+	},
+	"resources": [
+
+		//Azure Monitor Log Workspace
+		{
+			"type": "Microsoft.OperationalInsights/workspaces",
+			"apiVersion": "2021-06-01",
+			"name": "[variables('logAnalyticsWorkspaceName')]",
+			"location": "[parameters('location')]",
+			"properties": {
+				"retentionInDays": 30,
+				"features": {
+					"searchVersion": 1
+				},
+				"sku": {
+					"name": "PerGB2018"
+				}
+			}
+		},
+
+		//Azure Application Insights
+		{
+			"type": "Microsoft.Insights/components",
+			"apiVersion": "2020-02-02",
+			"name": "[variables('appInsightsName')]",
+			"location": "[parameters('location')]",
+			"kind": "web",
+			"dependsOn": [
+				"[resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName'))]"
+			],
+			"properties": {
+				"Application_Type": "web",
+				"WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName'))]"
+			}
+		},
+
+		//Azure Container Apps Environment
+		{
+			"type": "Microsoft.App/managedEnvironments",
+			"apiVersion": "2022-03-01",
+			"name": "[parameters('environment_name')]",
+			"location": "[parameters('location')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.Insights/components/', variables('appInsightsName'))]"
+			],
+			"properties": {
+				"daprAIInstrumentationKey": "[reference(resourceId('Microsoft.Insights/components/', variables('appInsightsName')), '2020-02-02').InstrumentationKey]",
+				"appLogsConfiguration": {
+					"destination": "log-analytics",
+					"logAnalyticsConfiguration": {
+						"customerId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName')), '2021-06-01').customerId]",
+						"sharedKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName')), '2021-06-01').primarySharedKey]"
+					}
+				}
+			},
+
+			"resources": [ //1. COMPONENTS
+				//STATE-STORE (COSMOS)
+				{
+					"type": "daprComponents",
+					"name": "cosmosdb-state",
+					"apiVersion": "2022-03-01",
+					"dependsOn": [
+						"[resourceId('Microsoft.App/managedEnvironments/', parameters('environment_name'))]"
+					],
+					"properties": {
+						"componentType": "state.azure.cosmosdb",
+						"version": "v1",
+						"ignoreErrors": false,
+						"initTimeout": "5s",
+						"secrets": [
+							{
+								"name": "cosmosmasterKey",
+								"value": "[parameters('cosmos_masterkey')]"
+							}
+						],
+						"metadata": [
+							{
+								"name": "url",
+								"value": "[parameters('cosmos_url')]"
+							},
+							{
+								"name": "masterKey",
+								"secretRef": "cosmosmasterKey"
+							},
+							{
+								"name": "database",
+								"value": "[parameters('cosmos_database')]"
+							},
+							{
+								"name": "collection",
+								"value": "[parameters('cosmos_collection')]"
+							}
+						],
+						"scopes": [ "catalog" ]
+					}
+				},
+
+				//{
+				//  "type": "daprComponents",
+				//  "name": "statestore",
+				//  "apiVersion": "2022-03-01",
+				//  "dependsOn": [
+				//    "[resourceId('Microsoft.App/managedEnvironments/', parameters('environment_name'))]"
+				//  ],
+				//  "properties": {
+				//    "componentType": "state.azure.blobstorage",
+				//    "version": "v1",
+				//    "ignoreErrors": false,
+				//    "initTimeout": "5s",
+				//    "secrets": [
+				//      {
+				//        "name": "storageaccountkey",
+				//        "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts/', parameters('storage_account_name')), '2021-09-01').keys[0].value]"
+				//      }
+				//    ],
+				//    "metadata": [
+				//      {
+				//        "name": "accountName",
+				//        "value": "[parameters('storage_account_name')]"
+				//      },
+				//      {
+				//        "name": "containerName",
+				//        "value": "[parameters('storage_container_name')]"
+				//      },
+				//      {
+				//        "name": "accountKey",
+				//        "secretRef": "storageaccountkey"
+				//      }
+				//    ],
+				//    "scopes": ["nodeapp"]
+				//  }
+				//}
+			]
+		},
+
+		//Azure Container Apps - Catalog
+		{
+			"type": "Microsoft.App/containerApps",
+			"apiVersion": "2022-03-01",
+			"name": "[variables('catalogAppName')]",
+			"location": "[parameters('location')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.App/managedEnvironments/', parameters('environment_name'))]"
+			],
+			"properties": {
+				"managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments/', parameters('environment_name'))]",
+				"configuration": {
+					"ingress": {
+						"external": true,
+						"targetPort": 80
+					},
+					"secrets": [
+						{
+							"name": "myregistrypassword",
+							"value": "[parameters('acr_password')]"
+						}
+					],
+					"registries": [
+						{
+							"server": "jramgar.azurecr.io",
+							"username": "[parameters('acr_username')]"
+							"passwordSecretRef": "myregistrypassword"
+						}
+					],
+					"dapr": {
+						"enabled": true,
+						"appId": "[variables('catalogAppName')]",
+						"appProcotol": "http",
+						"appPort": 80
+					}
+				},
+				"template": {
+					"revisionSuffix": "[parameters('catalog_rev')]",
+					"containers": [
+						{
+							"image": "[variables('catalogAppImage')]",
+							"name": "[variables('catalogAppName')]",
+							"env": [
+								{
+									"name": "HTTP_PORT",
+									"value": "80"
+								}
+							],
+							"resources": {
+								"cpu": 0.5,
+								"memory": "1.0Gi"
+							}
+						}
+					],
+					"scale": {
+						"minReplicas": 1,
+						"maxReplicas": 1
+					}
+				}
+			}
+		}
+	]
+}
