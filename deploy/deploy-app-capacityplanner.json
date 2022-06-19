@@ -1,0 +1,93 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"environment_name": {
+			"type": "string"
+		},
+		"location": {
+			"defaultValue": "northeurope",
+			"type": "string"
+		},
+		"acr_password": {
+			"type": "securestring"
+		},
+		"acr_username": {
+			"defaultValue": "jramgar",
+			"type": "string"
+		},
+		"planner_rev": {
+			"type": "string",
+			"defaultValue": "latest"
+		}
+	},
+	"variables": {
+		"environmnetName": "[concat('dotnet2022appenv-', parameters('environment_name'))]",
+
+		"plannerAppName": "capacityplanner",
+		"plannerAppImage": "[concat('jramgar.azurecr.io/capacityplanner:', parameters('planner_rev'))]"
+	},
+	"resources": [
+
+		{
+			"type": "Microsoft.App/containerApps",
+			"apiVersion": "2022-03-01",
+			"name": "[variables('plannerAppName')]",
+			"location": "[parameters('location')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
+			],
+			"properties": {
+				"managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]",
+				"configuration": {
+					"ingress": {
+						"external": true,
+						"targetPort": 80
+					},
+					"secrets": [
+						{
+							"name": "myregistrypassword",
+							"value": "[parameters('acr_password')]"
+						}
+					],
+					"registries": [
+						{
+							"server": "jramgar.azurecr.io",
+							"username": "[parameters('acr_username')]",
+							"passwordSecretRef": "myregistrypassword"
+						}
+					],
+					"dapr": {
+						"enabled": true,
+						"appId": "[variables('plannerAppName')]",
+						"appProcotol": "http",
+						"appPort": 80
+					}
+				},
+				"template": {
+					"revisionSuffix": "[parameters('planner_rev')]",
+					"containers": [
+						{
+							"image": "[variables('plannerAppImage')]",
+							"name": "[variables('plannerAppName')]",
+							"env": [
+								{
+									"name": "HTTP_PORT",
+									"value": "80"
+								}
+							],
+							"resources": {
+								"cpu": 0.5,
+								"memory": "1.0Gi"
+							}
+						}
+					],
+					"scale": {
+						"minReplicas": 1,
+						"maxReplicas": 1
+					}
+				}
+			}
+		}
+	]
+}
