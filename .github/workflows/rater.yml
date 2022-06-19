@@ -1,0 +1,28 @@
+name: rater
+
+on:
+  push:
+    branches: [ "main" ]
+    #paths: 
+    # - "src/Rater"
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+jobs:
+
+  CI:
+    # Build and publish docker image
+    runs-on: ubuntu-latest    
+    env:
+      appId: 'catalog'
+      appRev: 'latest' #${{ github.sha }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: azure/docker-login@v1
+      with:
+        login-server: jramgar.azurecr.io
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}        
+    - run: |
+        docker build -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }} -f src/Rater/Dockerfile ./src/. 
+        docker push jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}

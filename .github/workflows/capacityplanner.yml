@@ -27,7 +27,7 @@ jobs:
         docker build -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }} -f src/CapacityPlanner/Dockerfile ./src/. 
         docker push jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}
 
-  CD:
+  CD-ENV:
    # Create infra and publish app
     runs-on: ubuntu-latest
     env:
@@ -45,7 +45,7 @@ jobs:
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RG }}
-          template: ./deploy/azuredeploy.json
+          template: ./deploy/deploy-env-components.json
           parameters: 
             environment_name=demo 
             planner_rev=${{env.appRev}} 
@@ -57,3 +57,27 @@ jobs:
             redis_host=${{ env.redis_host }}
             redis_password=${{ secrets.AZURE_REDIS_PASSWORD }}
             sendgrid_apikey=${{ secrets.AZURE_SENDGRID_APIKEY }}
+
+
+  CD-APP:
+   # Create infra and publish app
+    runs-on: ubuntu-latest
+    env:      
+      appRev: 'latest' #${{ github.sha }}
+    needs: CD-ENV
+    steps:    
+      - uses: actions/checkout@main
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}        
+      - name: Run ARM deploy
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RG }}
+          template: ./deploy/deploy-app-capacityplanner.json
+          parameters: 
+            environment_name=demo 
+            planner_rev=${{env.appRev}} 
+            acr_username=${{ secrets.ACR_USERNAME }} 
+            acr_password=${{ secrets.ACR_PASSWORD }}             
