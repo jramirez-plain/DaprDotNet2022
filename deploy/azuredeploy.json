@@ -30,6 +30,22 @@
 			"type": "string",
 			"defaultValue": "hotels"
 		},
+		"servicebus_connectionstring": {
+			"type": "securestring"
+		},
+		"redis_host": {
+			"type": "string"
+		},
+		"redis_password": {
+			"type": "securestring"
+		},
+		"sendgrid_apikey": {
+			"type": "securestring"
+		},
+		"ratercron_expresion": {
+			"type": "string",
+			"defaultValue": "* 1 * * * *"
+		},
 		"catalog_rev": {
 			"type": "string",
 			"defaultValue": "latest"
@@ -73,7 +89,7 @@
 				}
 			}
 		},
-		
+
 		{
 			"type": "Microsoft.Insights/components",
 			"apiVersion": "2020-02-02",
@@ -146,12 +162,137 @@
 								"value": "[parameters('cosmos_collection')]"
 							}
 						],
+						"scopes": [ "[variables('catalogAppName')]" ]
+					}
+				},
+				{
+					"type": "daprComponents",
+					"name": "servicebus-pubsub",
+					"apiVersion": "2022-03-01",
+					"dependsOn": [
+						"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
+					],
+					"properties": {
+						"componentType": "pubsub.azure.servicebus",
+						"version": "v1",
+						"ignoreErrors": false,
+						"initTimeout": "5s",
+						"secrets": [
+							{
+								"name": "servicebusconnectionstring",
+								"value": "[parameters('servicebus_connectionstring')]"
+							}
+						],
+						"metadata": [
+							{
+								"name": "connectionString",
+								"secretRef": "servicebusconnectionstring"
+							}
+						],
 						"scopes": [ "[variables('plannerAppName')]" ]
+					}
+				},
+				{
+					"type": "daprComponents",
+					"name": "redis-state",
+					"apiVersion": "2022-03-01",
+					"dependsOn": [
+						"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
+					],
+					"properties": {
+						"componentType": "state.redis",
+						"version": "v1",
+						"ignoreErrors": false,
+						"initTimeout": "5s",
+						"secrets": [
+							{
+								"name": "redishost",
+								"value": "[parameters('redis_host')]"
+							},
+							{
+								"name": "redispassword",
+								"value": "[parameters('redis_password')]"
+							}
+						],
+						"metadata": [
+							{
+								"name": "redisHost",
+								"secretRef": "redishost"
+							},
+							{
+								"name": "redisPassword",
+								"secretRef": "redispassword"
+							},
+							{
+								"name": "enableTLS",
+								"value": "true"
+							},
+							{
+								"name": "abortConnect",
+								"value": "false"
+							}
+						],
+						"scopes": [
+							"[variables('plannerAppName')]",
+							"[variables('raterAppName')]"
+						]
+					}
+				},
+				{
+					"type": "daprComponents",
+					"name": "sendgrid",
+					"apiVersion": "2022-03-01",
+					"dependsOn": [
+						"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
+					],
+					"properties": {
+						"componentType": "bindings.twilio.sendgrid",
+						"version": "v1",
+						"ignoreErrors": false,
+						"initTimeout": "5s",
+						"secrets": [
+							{
+								"name": "apikey",
+								"value": "[parameters('sendgrid_apikey')]"
+							}
+						],
+						"metadata": [
+							{
+								"name": "apiKey",
+								"secretRef": "apikey"
+							}
+						],
+						"scopes": [
+							"[variables('raterAppName')]"
+						]
+					}
+				},
+				{
+					"type": "daprComponents",
+					"name": "rater-cron",
+					"apiVersion": "2022-03-01",
+					"dependsOn": [
+						"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
+					],
+					"properties": {
+						"componentType": "bindings.cron",
+						"version": "v1",
+						"ignoreErrors": false,
+						"initTimeout": "5s",						
+						"metadata": [
+							{
+								"name": "schedule",
+								"secretRef": "[parameters('ratercron_expresion')]"
+							}
+						],
+						"scopes": [
+							"[variables('raterAppName')]"
+						]
 					}
 				}
 			]
 		},
-		
+
 		{
 			"type": "Microsoft.App/containerApps",
 			"apiVersion": "2022-03-01",
