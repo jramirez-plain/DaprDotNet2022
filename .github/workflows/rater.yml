@@ -1,10 +1,10 @@
-name: capacityplanner
+name: rater
 
 on:
   push:
     branches: [ "main" ]
     paths: 
-    - "src/CapacityPlanner"
+    - "src/Rater"
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
@@ -14,7 +14,7 @@ jobs:
     # Build and publish docker image
     runs-on: ubuntu-latest    
     env:
-      appId: 'capacityplanner'
+      appId: 'catalog'
       appRev: 'latest' #${{ github.sha }}
     steps:
     - uses: actions/checkout@v3
@@ -24,7 +24,7 @@ jobs:
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}        
     - run: |
-        docker build -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }} -f src/CapacityPlanner/Dockerfile ./src/. 
+        docker build -t jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }} -f src/Rater/Dockerfile ./src/. 
         docker push jramgar.azurecr.io/${{ env.appId }}:${{ env.appRev }}
 
   CD:
@@ -61,9 +61,9 @@ jobs:
         with:
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
           resourceGroupName: ${{ secrets.AZURE_RG }}
-          template: ./deploy/deploy-app-capacityplanner.json
+          template: ./deploy/deploy-app-rater.json
           parameters: 
             environment_name=demo 
-            planner_rev=${{env.appRev}} 
+            rater_rev=${{env.appRev}} 
             acr_username=${{ secrets.ACR_USERNAME }} 
-            acr_password=${{ secrets.ACR_PASSWORD }}             
+            acr_password=${{ secrets.ACR_PASSWORD }}         

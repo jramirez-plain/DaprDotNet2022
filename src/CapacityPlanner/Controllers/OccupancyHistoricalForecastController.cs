@@ -21,10 +21,10 @@ namespace CapacityPlanner.Controllers
 
         [Topic("servicebus-pubsub", "capacity-forecast", "event.data.type = 'historical'", 1)]
         [HttpPost]
-        public async Task Create(OccupancyHistoricalForecast historicalForecast, CancellationToken cancellationToken)
+        public async Task Create([FromBody]OccupancyHistoricalForecast historicalForecast, CancellationToken cancellationToken)
         {
             var capacityForecastValue = GetCapacityForecastValue(historicalForecast);
-            var capacityForecast = new CapacityForecast(capacityForecastValue, CONFIDENCE_RATE);
+            var capacityForecast = new CapacityForecast(historicalForecast.HotelCode, historicalForecast.Date, capacityForecastValue, CONFIDENCE_RATE);
             await _capacityForecastService.SaveCapacityForecast(capacityForecast, cancellationToken);
         }
 

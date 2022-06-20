@@ -7,7 +7,8 @@ namespace CapacityPlanner.Services
     {
         private readonly DaprClient _daprClient;
         private const string CATALOG = "catalog";
-        private const string CATALOG_METHOD = "catalog";
+        private const string CATALOG_METHOD = "hotels";
+        private const string STORE_NAME = "redis-state";
         public CapacityForecastService(DaprClient daprClient)
         {
             _daprClient = daprClient;
@@ -15,23 +16,27 @@ namespace CapacityPlanner.Services
 
         public Task SaveCapacityForecast(CapacityForecast capacityForecast, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return _daprClient.SaveStateAsync<CapacityForecast>(STORE_NAME, new CapacityForecastKey(capacityForecast.HotelCode, capacityForecast.Date).Key, capacityForecast, cancellationToken: cancellationToken);
         }
 
-        public Task<CapacityForecast> RetrieveCapacityForecast(DateTime dateTime, CancellationToken cancellationToken)
+        public Task<CapacityForecast> RetrieveCapacityForecast(string hotelCode, DateTime date, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return _daprClient.GetStateAsync<CapacityForecast>(STORE_NAME, new CapacityForecastKey(hotelCode, date).Key, cancellationToken: cancellationToken);
         }
 
-        public async Task<int> GetTotalCapacity(CancellationToken cancellationToken)
+        public async Task<int> GetTotalCapacity(string hotelCode, CancellationToken cancellationToken)
         {
-            var hotelCode = "1"; //todo;
             var hotelInformation = await _daprClient.InvokeMethodAsync<HotelInfo>(
                 HttpMethod.Get,
                 CATALOG,
                 $"{CATALOG_METHOD}/{hotelCode}",
                 cancellationToken);
             return hotelInformation.RoomNumber;
+        }
+
+        private record CapacityForecastKey(string hotelCode, DateTime date)
+        {
+            public string Key => $"hotelCode={hotelCode}:date={date.ToString("s")}";
         }
     }
 }

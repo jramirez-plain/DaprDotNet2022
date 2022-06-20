@@ -1,0 +1,279 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"environment_name": {
+			"type": "string"
+		},
+		"location": {
+			"defaultValue": "northeurope",
+			"type": "string"
+		},
+		"acr_password": {
+			"type": "securestring"
+		},
+		"acr_username": {
+			"defaultValue": "jramgar",
+			"type": "string"
+		},
+		"cosmos_url": {
+			"type": "string"
+		},
+		"cosmos_masterkey": {
+			"type": "securestring"
+		},
+		"cosmos_database": {
+			"type": "string",
+			"defaultValue": "catalog"
+		},
+		"cosmos_collection": {
+			"type": "string",
+			"defaultValue": "hotels"
+		},
+		"servicebus_connectionstring": {
+			"type": "securestring"
+		},
+		"redis_host": {
+			"type": "string"
+		},
+		"redis_password": {
+			"type": "securestring"
+		},
+		"sendgrid_apikey": {
+			"type": "securestring"
+		},
+		"ratercron_expresion": {
+			"type": "string",
+			"defaultValue": "* 1 * * * *"
+		}
+	},
+	"variables": {
+		"logAnalyticsWorkspaceName": "[concat('dotnet2022logs-', parameters('environment_name'))]",
+		"appInsightsName": "[concat('dotnet2022appins-', parameters('environment_name'))]",
+		"environmnetName": "[concat('dotnet2022appenv-', parameters('environment_name'))]",
+
+		"plannerAppName": "capacityplanner",
+		"catalogAppName": "catalog",
+		"raterAppName": "rater"
+	},
+	"resources": [
+		{
+			"type": "Microsoft.OperationalInsights/workspaces",
+			"apiVersion": "2021-06-01",
+			"name": "[variables('logAnalyticsWorkspaceName')]",
+			"location": "[parameters('location')]",
+			"properties": {
+				"retentionInDays": 30,
+				"features": {
+					"searchVersion": 1
+				},
+				"sku": {
+					"name": "PerGB2018"
+				}
+			}
+		},
+
+		{
+			"type": "Microsoft.Insights/components",
+			"apiVersion": "2020-02-02",
+			"name": "[variables('appInsightsName')]",
+			"location": "[parameters('location')]",
+			"kind": "web",
+			"dependsOn": [
+				"[resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName'))]"
+			],
+			"properties": {
+				"Application_Type": "web",
+				"WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName'))]"
+			}
+		},
+
+		{
+			"type": "Microsoft.App/managedEnvironments",
+			"apiVersion": "2022-03-01",
+			"name": "[variables('environmnetName')]",
+			"location": "[parameters('location')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.Insights/components/', variables('appInsightsName'))]"
+			],
+			"properties": {
+				"daprAIInstrumentationKey": "[reference(resourceId('Microsoft.Insights/components/', variables('appInsightsName')), '2020-02-02').InstrumentationKey]",
+				"appLogsConfiguration": {
+					"destination": "log-analytics",
+					"logAnalyticsConfiguration": {
+						"customerId": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName')), '2021-06-01').customerId]",
+						"sharedKey": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', variables('logAnalyticsWorkspaceName')), '2021-06-01').primarySharedKey]"
+					}
+				}
+			},
+
+			"resources": [
+
+				{
+					"type": "daprComponents",
+					"name": "cosmosdb-state",
+					"apiVersion": "2022-03-01",
+					"dependsOn": [
+						"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
+					],
+					"properties": {
+						"componentType": "state.azure.cosmosdb",
+						"version": "v1",
+						"ignoreErrors": false,
+						"initTimeout": "5s",
+						"secrets": [
+							{
+								"name": "cosmosmasterkey",
+								"value": "[parameters('cosmos_masterkey')]"
+							}
+						],
+						"metadata": [
+							{
+								"name": "url",
+								"value": "[parameters('cosmos_url')]"
+							},
+							{
+								"name": "masterKey",
+								"secretRef": "cosmosmasterkey"
+							},
+							{
+								"name": "database",
+								"value": "[parameters('cosmos_database')]"
+							},
+							{
+								"name": "collection",
+								"value": "[parameters('cosmos_collection')]"
+							}
+						],
+						"scopes": [ "[variables('catalogAppName')]" ]
+					}
+				},
+				{
+					"type": "daprComponents",
+					"name": "servicebus-pubsub",
+					"apiVersion": "2022-03-01",
+					"dependsOn": [
+						"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
+					],
+					"properties": {
+						"componentType": "pubsub.azure.servicebus",
+						"version": "v1",
+						"ignoreErrors": false,
+						"initTimeout": "5s",
+						"secrets": [
+							{
+								"name": "servicebusconnectionstring",
+								"value": "[parameters('servicebus_connectionstring')]"
+							}
+						],
+						"metadata": [
+							{
+								"name": "connectionString",
+								"secretRef": "servicebusconnectionstring"
+							}
+						],
+						"scopes": [ "[variables('plannerAppName')]" ]
+					}
+				},
+				{
+					"type": "daprComponents",
+					"name": "redis-state",
+					"apiVersion": "2022-03-01",
+					"dependsOn": [
+						"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
+					],
+					"properties": {
+						"componentType": "state.redis",
+						"version": "v1",
+						"ignoreErrors": false,
+						"initTimeout": "5s",
+						"secrets": [
+							{
+								"name": "redishost",
+								"value": "[parameters('redis_host')]"
+							},
+							{
+								"name": "redispassword",
+								"value": "[parameters('redis_password')]"
+							}
+						],
+						"metadata": [
+							{
+								"name": "redisHost",
+								"secretRef": "redishost"
+							},
+							{
+								"name": "redisPassword",
+								"secretRef": "redispassword"
+							},
+							{
+								"name": "enableTLS",
+								"value": "true"
+							},
+							{
+								"name": "abortConnect",
+								"value": "false"
+							}
+						],
+						"scopes": [
+							"[variables('plannerAppName')]",
+							"[variables('raterAppName')]"
+						]
+					}
+				},
+				{
+					"type": "daprComponents",
+					"name": "sendgrid",
+					"apiVersion": "2022-03-01",
+					"dependsOn": [
+						"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
+					],
+					"properties": {
+						"componentType": "bindings.twilio.sendgrid",
+						"version": "v1",
+						"ignoreErrors": false,
+						"initTimeout": "5s",
+						"secrets": [
+							{
+								"name": "apikey",
+								"value": "[parameters('sendgrid_apikey')]"
+							}
+						],
+						"metadata": [
+							{
+								"name": "apiKey",
+								"secretRef": "apikey"
+							}
+						],
+						"scopes": [
+							"[variables('raterAppName')]"
+						]
+					}
+				},
+				{
+					"type": "daprComponents",
+					"name": "rater-cron",
+					"apiVersion": "2022-03-01",
+					"dependsOn": [
+						"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
+					],
+					"properties": {
+						"componentType": "bindings.cron",
+						"version": "v1",
+						"ignoreErrors": false,
+						"initTimeout": "5s",
+						"metadata": [
+							{
+								"name": "schedule",
+								"value": "[parameters('ratercron_expresion')]"
+							}
+						],
+						"scopes": [
+							"[variables('raterAppName')]"
+						]
+					}
+				}
+			]
+		}
+	]
+}
