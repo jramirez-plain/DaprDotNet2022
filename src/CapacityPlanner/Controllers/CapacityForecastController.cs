@@ -34,6 +34,9 @@ namespace CapacityPlanner.Controllers
         public async Task<ActionResult> Create(CapacityForecast capacityForecast, CancellationToken cancellationToken)
         {
             await _capacityForecastService.SaveCapacityForecast(capacityForecast, cancellationToken);
+
+            _logger.LogTrace($"Capacity forecast created {capacityForecast.HotelCode} - {capacityForecast.OccupancyPercentage}%");
+
             return Ok(capacityForecast);
         }
 

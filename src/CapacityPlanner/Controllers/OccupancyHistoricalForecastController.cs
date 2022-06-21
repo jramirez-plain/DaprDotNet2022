@@ -26,6 +26,8 @@ namespace CapacityPlanner.Controllers
             var capacityForecastValue = GetCapacityForecastValue(historicalForecast);
             var capacityForecast = new CapacityForecast(historicalForecast.HotelCode, historicalForecast.Date, capacityForecastValue, CONFIDENCE_RATE);
             await _capacityForecastService.SaveCapacityForecast(capacityForecast, cancellationToken);
+
+            _logger.LogTrace($"Hitorical capacity forecast created {capacityForecast.HotelCode} - {capacityForecast.OccupancyPercentage}%");
         }
 
         private double GetCapacityForecastValue(OccupancyHistoricalForecast forecast) =>
