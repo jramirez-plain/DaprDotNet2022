@@ -40,7 +40,7 @@
 			"properties": {
 				"managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]",
 				"configuration": {
-					"activeRevisionsMode": "multiple",
+					//"activeRevisionsMode": "multiple",
 					"ingress": {
 						"external": true,
 						"targetPort": 80,
