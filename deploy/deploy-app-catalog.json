@@ -40,9 +40,20 @@
 			"properties": {
 				"managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]",
 				"configuration": {
+					"activeRevisionsMode": "multiple",
 					"ingress": {
 						"external": true,
-						"targetPort": 80
+						"targetPort": 80,
+						"traffic": [
+							//{
+							//	"revisionName": "NAME??",
+							//	"weight": 30
+							//},
+							{
+								"latestRevision": true,
+								"weight": 100
+							}
+						]
 					},
 					"secrets": [
 						{

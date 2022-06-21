@@ -192,10 +192,7 @@
 								"value": " [{ \"name\": \"contryIdx \", \"indexes\": [{ \"key\": \"countryCode\", \"type\": \"TEXT\" }]}] "
 							}
 						],
-						"scopes": [
-							"[variables('plannerAppName')]",
-							"[variables('raterAppName')]"
-						]
+						"scopes": [ "[variables('catalogAppName')]" ]
 					}
 				},
 				{
