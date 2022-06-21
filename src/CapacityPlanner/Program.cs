@@ -24,6 +24,7 @@ namespace CapacityPlanner
             builder.Services.AddSingleton<CapacityForecastService>();
 
 
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -36,6 +37,12 @@ namespace CapacityPlanner
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            // Dapr will send serialized event object vs. being raw CloudEvent
+            app.UseCloudEvents();
+
+            // needed for Dapr pub/sub routing
+            app.MapSubscribeHandler();
 
             app.UseAuthorization();
 

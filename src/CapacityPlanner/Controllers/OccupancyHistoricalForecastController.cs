@@ -19,9 +19,9 @@ namespace CapacityPlanner.Controllers
             _logger = logger;
         }
 
-        [Topic("servicebus-pubsub", "capacity-forecast", "event.data.type = 'historical'", 1)]
+        [Topic("servicebus-pubsub", "capacityforecast", "event.source == \"historical\"", 1)]
         [HttpPost]
-        public async Task Create([FromBody]OccupancyHistoricalForecast historicalForecast, CancellationToken cancellationToken)
+        public async Task Create([FromBody] OccupancyHistoricalForecast historicalForecast, CancellationToken cancellationToken)
         {
             var capacityForecastValue = GetCapacityForecastValue(historicalForecast);
             var capacityForecast = new CapacityForecast(historicalForecast.HotelCode, historicalForecast.Date, capacityForecastValue, CONFIDENCE_RATE);

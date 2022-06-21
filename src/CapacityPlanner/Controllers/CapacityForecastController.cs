@@ -29,7 +29,7 @@ namespace CapacityPlanner.Controllers
             return Ok(capacityForecast);
         }
 
-        [Topic("servicebus-pubsub", "capacity-forecast")]
+        [Topic("servicebus-pubsub", "capacityforecast")]
         [HttpPost]
         public async Task<ActionResult> Create(CapacityForecast capacityForecast, CancellationToken cancellationToken)
         {

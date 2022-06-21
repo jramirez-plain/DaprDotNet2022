@@ -4,8 +4,43 @@ Dapr example for DotNet2022
 # Sample
 
 ## Send capacity forecast messages:
-``` Bash
-dapr publish --publish-app-id capacityplanner --pubsub servicebus-pubsub --topic capacity-forecast --data '{"specversion" : "1.0", "type" : "com.dapr.cloudevent.sent", "source" : "Historical Forecaster", "subject" : "Forecast", "id" : "someCloudEventId", "time" : "2022-06-28T09:00:00Z", "datacontenttype" : "application/cloudevents+json", "data" : {"date": "2022-07-01T00:00:00Z", "historicalLevel": "5"}}'
+
+Message to publish:
+
+Historical Forecast:
+
+``` json
+{
+  "id": "2e45ec17-c2c4-4254-a18c-c1190fd32dd0",
+  "source": "historical",
+  "specversion": "1.0",
+  "type": "com.dapr.event.sent",
+  "traceparent": "00-216deef472a0836071147d9eb13bcb76-d230a75ad0ca60f4-00",
+  "datacontenttype": "application/json",
+  "data": {
+      "hotelCode": "1",
+      "date": "2022-07-01",
+      "historicalLevel": 6
+  }
+}
+```
+
+Reservation Trend:
+
+``` json
+{
+  "id": "4b45ec17-b2c2-2332-b15c-c5670fd32d55",
+  "source": "reservations",
+  "specversion": "1.0",
+  "type": "com.dapr.event.sent",
+  "traceparent": "00-216deef472a0836071147d9eb13bcb76-d230a75ad0ca60f4-00",
+  "datacontenttype": "application/json",
+  "data": {
+      "hotelCode": "1",
+      "date": "2022-07-01",
+      "estimatedReservations": 90
+  }
+}
 ```
 
 # deploy

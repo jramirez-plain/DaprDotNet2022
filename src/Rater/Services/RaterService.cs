@@ -84,11 +84,13 @@ namespace Rater.Services
         private string GenerateMailBody(HotelInfo hotel, IEnumerable<Rate> rates)
         {
             var textBuilder = new StringBuilder();
-            textBuilder.AppendLine($"Rates for hotel {hotel.Name}");
+            textBuilder.Append($"Rates for hotel {hotel.Name}<br/>");
+            textBuilder.Append("<ul>");
             foreach (var rate in rates)
             {
-                textBuilder.AppendLine($"Date {rate.Date}: {rate.Price}€");
+                textBuilder.Append($"<li> {rate.Date.ToString("d")}: {rate.Price.ToString("C")}€ </li>");
             }
+            textBuilder.Append("</ul>");
             return textBuilder.ToString();
         }
 

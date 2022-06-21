@@ -19,7 +19,7 @@ namespace CapacityPlanner.Controllers
             _logger = logger;
         }
 
-        [Topic("servicebus-pubsub", "capacity-forecast", "event.data.type = 'reservations'", 2)]
+        [Topic("servicebus-pubsub", "capacityforecast", "event.source == \"reservations\"", 2)]
         [HttpPost]
         public async Task Create(OccupancyReservationTrend reservationTrend, CancellationToken cancellationToken)
         {
