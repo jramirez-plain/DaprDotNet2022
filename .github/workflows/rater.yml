@@ -8,14 +8,15 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
-jobs:
 
+env:
+  appId: 'rater'
+  appRev:  ${{ github.run_id }}
+
+jobs:
   CI:
     # Build and publish docker image
     runs-on: ubuntu-latest    
-    env:
-      appId: 'rater'
-      appRev: 'latest' #${{ github.sha }}
     steps:
     - uses: actions/checkout@v3
     - uses: azure/docker-login@v1
@@ -32,8 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       cosmos_url: 'https://demodaprcrd.documents.azure.com:443/ '
-      redis_host: 'dotnet2022redis.redis.cache.windows.net:6380'
-      appRev: 'latest' #${{ github.sha }}
+      redis_host: 'dotnet2022redis.redis.cache.windows.net:6380'      
     needs: CI
     steps:    
       - uses: actions/checkout@main

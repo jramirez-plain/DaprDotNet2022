@@ -84,7 +84,17 @@
 					],
 					"scale": {
 						"minReplicas": 1,
-						"maxReplicas": 1
+						"maxReplicas": 3,
+						"rules": [
+							{
+								"name": "http-rule",
+								"http": {
+									"metadata": {
+										"concurrentRequests": "100"
+									}
+								}
+							}
+						]
 					}
 				}
 			}

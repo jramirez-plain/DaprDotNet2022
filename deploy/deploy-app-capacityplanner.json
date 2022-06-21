@@ -16,6 +16,9 @@
 			"defaultValue": "jramgar",
 			"type": "string"
 		},
+		"serviceBus_connection": {
+			"type": "securestring"
+		},
 		"planner_rev": {
 			"type": "string",
 			"defaultValue": "latest"
@@ -84,7 +87,26 @@
 					],
 					"scale": {
 						"minReplicas": 1,
-						"maxReplicas": 1
+						"maxReplicas": 3,
+						"rules": [
+							{
+								"name": "queue-based-autoscaling",
+								"custom": {
+									"type": "azure-servicebus",
+									"metadata": {
+										"queueName": "capacityforecast",
+										"messageCount": "5",
+										"topicname" : "capacityforecast"
+									},
+									"auth": [
+										{											
+											"triggerParameter": "connection",
+											"secretRef": "[parameters('serviceBus_connection')]"
+										}
+									]
+								}
+							}
+						]
 					}
 				}
 			}
