@@ -116,7 +116,8 @@ For example we have a state component based on keyvault, like that:
 To create our new component, we will use the yaml definition directly with az cli tu have available that component dor  our applications
 
 ``` Bash
-  az containerapp env dapr-component set --name DaprApps -g DotNet2022 --dapr-component-name mysecretstore --yaml .\deploy\kvsecretcomponent.yaml
+  az containerapp env dapr-component set --name DaprApps -g DotNet2022 --dapr-component-name mysecretstore --yaml .\deploy\mysecretstore.yaml
+  az containerapp env dapr-component set --name DaprApps -g DotNet2022 --dapr-component-name mystatestore --yaml .\deploy\mystatestore.yaml
 ``` 
 
 We can list or available components in our environment with that command
@@ -133,4 +134,10 @@ Now that we have an Azure Components App environment ready, we can start deployi
 ``` bash
   az containerapp create -n capacityplanner -g DotNet2022 --environment DaprApps --yaml .\deploy\capacityplanner.yml
 ```
+
+If we want to access to the service, we need to enable an ingress, that could be internal or external and we need a target port for the ingress
+
+```bash
+  az containerapp ingress enable -n capacityplanner -g DotNet2022 --type internal --target-port 80
+``` 
 
