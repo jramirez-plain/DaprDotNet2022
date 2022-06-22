@@ -8,14 +8,7 @@
 		"location": {
 			"defaultValue": "northeurope",
 			"type": "string"
-		},
-		"acr_password": {
-			"type": "securestring"
-		},
-		"acr_username": {
-			"defaultValue": "jramgar",
-			"type": "string"
-		},
+		},		
 		"cosmos_url": {
 			"type": "string"
 		},
@@ -109,45 +102,6 @@
 
 			"resources": [
 
-				//{
-				//	"type": "daprComponents",
-				//	"name": "cosmosdb-state",
-				//	"apiVersion": "2022-03-01",
-				//	"dependsOn": [
-				//		"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
-				//	],
-				//	"properties": {
-				//		"componentType": "state.azure.cosmosdb",
-				//		"version": "v1",
-				//		"ignoreErrors": false,
-				//		"initTimeout": "5s",
-				//		"secrets": [
-				//			{
-				//				"name": "cosmosmasterkey",
-				//				"value": "[parameters('cosmos_masterkey')]"
-				//			}
-				//		],
-				//		"metadata": [
-				//			{
-				//				"name": "url",
-				//				"value": "[parameters('cosmos_url')]"
-				//			},
-				//			{
-				//				"name": "masterKey",
-				//				"secretRef": "cosmosmasterkey"
-				//			},
-				//			{
-				//				"name": "database",
-				//				"value": "[parameters('cosmos_database')]"
-				//			},
-				//			{
-				//				"name": "collection",
-				//				"value": "[parameters('cosmos_collection')]"
-				//			}
-				//		],
-				//		"scopes": [ "[variables('catalogAppName')]" ]
-				//	}
-				//},
 				{
 					"type": "daprComponents",
 					"name": "cosmosdb-state",
@@ -156,26 +110,32 @@
 						"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
 					],
 					"properties": {
-						"componentType": "state.redis",
+						"componentType": "state.azure.cosmosdb",
 						"version": "v1",
 						"ignoreErrors": false,
-						"initTimeout": "5s",						
+						"initTimeout": "5s",
+						"secrets": [
+							{
+								"name": "cosmosmasterkey",
+								"value": "[parameters('cosmos_masterkey')]"
+							}
+						],
 						"metadata": [
 							{
-								"name": "redisHost",
-								"value": "redisearch:6379"
-							},							
-							{
-								"name": "enableTLS",
-								"value": "true"
+								"name": "url",
+								"value": "[parameters('cosmos_url')]"
 							},
 							{
-								"name": "abortConnect",
-								"value": "false"
+								"name": "masterKey",
+								"secretRef": "cosmosmasterkey"
 							},
 							{
-								"name": "queryIndexes",
-								"value": " [{ \"name\": \"contryIdx \", \"indexes\": [{ \"key\": \"countryCode\", \"type\": \"TEXT\" }]}] "
+								"name": "database",
+								"value": "[parameters('cosmos_database')]"
+							},
+							{
+								"name": "collection",
+								"value": "[parameters('cosmos_collection')]"
 							}
 						],
 						"scopes": [ "[variables('catalogAppName')]" ]
@@ -246,11 +206,12 @@
 							{
 								"name": "abortConnect",
 								"value": "false"
-							},
-							{
-								"name": "queryIndexes",
-								"value": " [{ \"name\": \"contryIdx \", \"indexes\": [{ \"key\": \"countryCode\", \"type\": \"TEXT\" }]}] "
 							}
+							//Only supported with rediserach and mjson modules - Azure Redis Cache Enterprise :/
+							// ,{
+							// 	"name": "queryIndexes",
+							// 	"value": " [{ \"name\": \"contryIdx \", \"indexes\": [{ \"key\": \"countryCode\", \"type\": \"TEXT\" }]}] "
+							// }
 						],
 						"scopes": [
 							"[variables('plannerAppName')]",
