@@ -2,10 +2,11 @@ name: aca-environment
 
 on:
   push:
-    branches: [ "main" ]
-    paths: 
-    - "src/deploy"  
-
+    branches:    
+      - 'main'
+    paths:
+      - 'src/deploy'
+      
   workflow_dispatch:
 
 jobs:
