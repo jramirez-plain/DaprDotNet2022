@@ -6,7 +6,10 @@ on:
 jobs:
   CD:
    # Create infra and publish app
-    runs-on: ubuntu-latest              
+    runs-on: ubuntu-latest       
+    env:
+      cosmos_url: 'https://demodaprcrd.documents.azure.com:443/ '
+      redis_host: 'dotnet2022redis.redis.cache.windows.net:6380'        
     steps:    
       - uses: actions/checkout@main
       - uses: azure/login@v1
