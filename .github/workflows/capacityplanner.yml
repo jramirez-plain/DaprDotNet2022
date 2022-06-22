@@ -2,11 +2,11 @@ name: capacityplanner
 
 on:
   push:
-    branches: [ "main" ]
-    paths: 
-    - "src/CapacityPlanner"
-  pull_request:
-    branches: [ "main" ]
+    branches:    
+      - 'main'
+    paths:
+      - 'src/CapacityPlanner'
+
   workflow_dispatch:
 
 env:
