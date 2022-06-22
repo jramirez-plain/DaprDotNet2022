@@ -1,0 +1,38 @@
+name: redissearch
+
+on:  
+  workflow_dispatch:
+
+jobs:
+  CD:
+   # Create infra and publish app
+    runs-on: ubuntu-latest              
+    steps:    
+      - uses: actions/checkout@main
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}        
+      - name: Run ARM deploy
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RG }}
+          template: ./deploy/deploy-env-components.json
+          parameters: 
+            environment_name=demo             
+            acr_username=${{ secrets.ACR_USERNAME }} 
+            acr_password=${{ secrets.ACR_PASSWORD }} 
+            cosmos_masterkey=${{ secrets.AZURE_COSMOS_MASTERKEY }} 
+            cosmos_url=${{ env.cosmos_url }}
+            servicebus_connectionstring=${{ secrets.AZURE_SERVICEBUS_CONNECTIONSTRING }}
+            redis_host=${{ env.redis_host }}
+            redis_password=${{ secrets.AZURE_REDIS_PASSWORD }}
+            sendgrid_apikey=${{ secrets.AZURE_SENDGRID_APIKEY }} 
+      - name: Run ARM deploy
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          resourceGroupName: ${{ secrets.AZURE_RG }}
+          template: ./deploy/deploy-redis-search.json
+          parameters: 
+            environment_name=demo           
