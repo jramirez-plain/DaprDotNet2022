@@ -16,6 +16,12 @@ namespace CapacityPlanner.Services
 
         public Task SaveCapacityForecast(CapacityForecast capacityForecast, CancellationToken cancellationToken)
         {
+
+            if (capacityForecast.OccupancyPercentage == 0.69)
+            {
+                System.Threading.Thread.Sleep(1000);
+            }
+
             return _daprClient.SaveStateAsync<CapacityForecast>(STORE_NAME, new CapacityForecastKey(capacityForecast.HotelCode, capacityForecast.Date).Key, capacityForecast, cancellationToken: cancellationToken);
         }
 

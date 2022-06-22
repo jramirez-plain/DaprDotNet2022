@@ -39,10 +39,10 @@
 			//],
 			"properties": {
 				"managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]",
-				"configuration": {
+				"configuration": {					
 					"ingress": {
 						"external": true,
-						"targetPort": 80
+						"targetPort": 80						
 					},
 					"secrets": [
 						{

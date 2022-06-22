@@ -84,25 +84,7 @@
 					],
 					"scale": {
 						"minReplicas": 1,
-						"maxReplicas": 5
-						// "rules": [
-						// 	{
-						// 		"name": "queue-based-autoscaling",
-						// 		"custom": {
-						// 			"type": "azure-servicebus",
-						// 			"metadata": {
-						// 				"queueName": "myServiceBusQueue",
-						// 				"messageCount": "20"
-						// 			},
-						// 			"auth": [
-						// 				{
-						// 					"secretRef": "servicebusconnectionstring",
-						// 					"triggerParameter": "connection"
-						// 				}
-						// 			]
-						// 		}
-						// 	}
-						// ]
+						"maxReplicas": 1						
 					}
 				}
 			}

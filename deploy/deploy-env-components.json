@@ -8,14 +8,7 @@
 		"location": {
 			"defaultValue": "northeurope",
 			"type": "string"
-		},
-		"acr_password": {
-			"type": "securestring"
-		},
-		"acr_username": {
-			"defaultValue": "jramgar",
-			"type": "string"
-		},
+		},		
 		"cosmos_url": {
 			"type": "string"
 		},
@@ -214,6 +207,11 @@
 								"name": "abortConnect",
 								"value": "false"
 							}
+							//Only supported with rediserach and mjson modules - Azure Redis Cache Enterprise :/
+							// ,{
+							// 	"name": "queryIndexes",
+							// 	"value": " [{ \"name\": \"contryIdx \", \"indexes\": [{ \"key\": \"countryCode\", \"type\": \"TEXT\" }]}] "
+							// }
 						],
 						"scopes": [
 							"[variables('plannerAppName')]",

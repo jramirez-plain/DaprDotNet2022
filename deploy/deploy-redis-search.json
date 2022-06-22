@@ -1,0 +1,57 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environment_name": {
+      "type": "string"
+    },
+    "location": {
+      "defaultValue": "northeurope",
+      "type": "string"
+    }
+  },
+  "variables": {
+    "environmnetName": "[concat('dotnet2022appenv-', parameters('environment_name'))]",
+    "appName": "redisearch"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.App/containerApps",
+      "apiVersion": "2022-03-01",
+      "name": "[variables('appName')]",
+      "location": "[parameters('location')]",
+      //"dependsOn": [
+      //	"[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]"
+      //],
+      "properties": {
+        "managedEnvironmentId": "[resourceId('Microsoft.App/managedEnvironments/', variables('environmnetName'))]",
+        "configuration": {
+          "ingress": {
+            "external": true,
+            "targetPort": 6379
+          },
+          "dapr": {
+            "enabled": false
+          }
+        },
+        "template": {
+          "revisionSuffix": "rev01",
+          "containers": [
+            {
+              "image": "redislabs/redisearch:latest",
+              "name": "[variables('appName')]",
+              "resources": {
+                "cpu": 0.5,
+                "memory": "1.0Gi"
+              }
+            }
+          ],
+          "scale": {
+            "minReplicas": 1,
+            "maxReplicas": 1
+          }
+        }
+      }
+    }
+  ]
+}
