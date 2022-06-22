@@ -163,7 +163,7 @@
 						"metadata": [
 							{
 								"name": "redisHost",
-								"value": "redisearch--rev01-74897b78d6-xtm7l:6379"
+								"value": "redisearch:6379"
 							},							
 							{
 								"name": "enableTLS",
