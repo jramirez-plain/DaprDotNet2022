@@ -159,25 +159,15 @@
 						"componentType": "state.redis",
 						"version": "v1",
 						"ignoreErrors": false,
-						"initTimeout": "5s",
-						"secrets": [
-							{
-								"name": "redishost",
-								"value": "[parameters('redis_host')]"
-							},
-							{
-								"name": "redispassword",
-								"value": "[parameters('redis_password')]"
-							}
-						],
+						"initTimeout": "5s",						
 						"metadata": [
 							{
 								"name": "redisHost",
-								"secretRef": "redishost"
+								"value": "redisearch--rev01-74897b78d6-xtm7l:6379"
 							},
 							{
 								"name": "redisPassword",
-								"secretRef": "redispassword"
+								"value": ""
 							},
 							{
 								"name": "enableTLS",
