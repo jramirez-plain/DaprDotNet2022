@@ -5,13 +5,13 @@ namespace HotelCatalog.Services
 {
     public class HotelCatalogService
     {
-        private readonly DaprClient _daprClient;        
+        private readonly DaprClient _daprClient;
 
 
         private string STORE_NAME = "cosmosdb-state"; //"redis-state"; //"blobstorage-state";
         public HotelCatalogService(DaprClient daprClient)
         {
-            _daprClient = daprClient;            
+            _daprClient = daprClient;
         }
 
         public Task<Hotel> GetHotel(string code, CancellationToken cancellationToken)
@@ -46,7 +46,9 @@ namespace HotelCatalog.Services
         {
             var response = await _daprClient.GetStateAsync<IEnumerable<Hotel>>(STORE_NAME, "hotels", cancellationToken: cancellationToken);
 
-            return response.Where(h => h.CountryCode == countryCode);
+            return response.Any() ?
+                response.Where(h => h.CountryCode == countryCode) :
+                Enumerable.Empty<Hotel>();
         }
     }
 }
