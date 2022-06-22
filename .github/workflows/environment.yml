@@ -28,9 +28,7 @@ jobs:
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./deploy/deploy-env-components.json
           parameters: 
-            environment_name=demo             
-            acr_username=${{ secrets.ACR_USERNAME }} 
-            acr_password=${{ secrets.ACR_PASSWORD }} 
+            environment_name=demo                         
             cosmos_masterkey=${{ secrets.AZURE_COSMOS_MASTERKEY }} 
             cosmos_url=${{ env.cosmos_url }}
             servicebus_connectionstring=${{ secrets.AZURE_SERVICEBUS_CONNECTIONSTRING }}
