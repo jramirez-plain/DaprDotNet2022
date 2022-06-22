@@ -1,10 +1,12 @@
 apiVersion: dapr.io/v1alpha1
 kind: Configuration
 metadata:
-  name: pubsubroutingconfig
+  name: configuration
 spec:
   features:
     - name: PubSub.Routing
       enabled: true
     - name: ServiceInvocation.NoDefaultContentType
-      enabled: true      
+      enabled: true   
+    - name: Resiliency
+      enabled: true

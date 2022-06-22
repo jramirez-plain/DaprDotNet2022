@@ -3,6 +3,10 @@ Dapr example for DotNet2022
 
 # Sample
 
+dapr run --app-id catalogplanner --app-port 5151 --log-as-json --log-level debug --metrics-port 9000 --config C:\Users\crecuero\source\repos\DaprDotNet2022\dapr\configuration\configuration.yaml --components-path C:\Users\crecuero\source\repos\DaprDotNet2022\dapr\components -- dotnet run
+
+dapr run --app-id catalog --app-port 5195 --dapr-grpc-port 50001 --dapr-http-port 3500 --log-as-json --log-level debug --metrics-port 9001 --placement-host-address 127.0.0.1:6050 --config C:\Users\crecuero\source\repos\DaprDotNet2022\dapr\configuration\configuration.yaml --components-path C:\Users\crecuero\source\repos\DaprDotNet2022\dapr\components -- dotnet run
+
 ## Send capacity forecast messages:
 
 Message to publish:
@@ -39,6 +43,25 @@ Reservation Trend:
       "hotelCode": "1",
       "date": "2022-07-01",
       "estimatedReservations": 90
+  }
+}
+```
+
+Direct forecast:
+
+``` json
+{
+  "id": "2e45ec17-c2c4-4254-a18c-c1190fd32dd0",
+  "source": "historical",
+  "specversion": "1.0",
+  "type": "com.dapr.event.sent",
+  "traceparent": "00-216deef472a0836071147d9eb13bcb76-d230a75ad0ca60f4-00",
+  "datacontenttype": "application/json",
+  "data": {
+    "hotelCode": "1",
+    "date": "2022-07-01",
+    "occupancyPercentage": 0.69,
+    "confidenceRate": 0.7
   }
 }
 ```
