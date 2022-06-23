@@ -25,7 +25,7 @@ namespace HotelCatalog.Services
             return _daprClient.SaveStateAsync(STORE_NAME, hotel.Code, hotel, cancellationToken: cancellationToken);
         }
 
-        public async Task<IEnumerable<Hotel>> GetHotelsWithQuery(string countryCode, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Hotel>> GetHotels(string countryCode, CancellationToken cancellationToken)
         {
             var jsonQuery = @$"
             {{
@@ -41,15 +41,6 @@ namespace HotelCatalog.Services
 
             var queryResponse = await _daprClient.QueryStateAsync<Hotel>(STORE_NAME, jsonQuery, metaproperties, cancellationToken: cancellationToken);
             return queryResponse.Results.Select(x => x.Data);
-        }
-
-        public async Task<IEnumerable<Hotel>> GetHotelsWithFilter(string countryCode, CancellationToken cancellationToken)
-        {
-            var response = await _daprClient.GetStateAsync<IEnumerable<Hotel>>(STORE_NAME, "hotels", cancellationToken: cancellationToken);
-
-            return response.Any() ?
-                response.Where(h => h.CountryCode == countryCode) :
-                Enumerable.Empty<Hotel>();
-        }
+        }       
     }
 }
