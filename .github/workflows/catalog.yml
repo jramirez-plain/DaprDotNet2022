@@ -1,17 +1,19 @@
 name: catalog
 
+on:
+  push:
+    branches:    
+      - 'main'
+    paths:
+      - 'src/HotelCatalog'
+
+  workflow_dispatch:
+
 env:
   appId: 'catalog'
   appRev:  ${{ github.run_id }}
 
-on:
-  push:
-    branches: [ "main" ]
-    paths: 
-    - "src/HotelCatalog"
-  pull_request:
-    branches: [ "main" ]
-  workflow_dispatch:
+
 jobs:
   CI:
     # Build and publish docker image

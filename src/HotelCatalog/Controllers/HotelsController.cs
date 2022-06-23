@@ -20,9 +20,24 @@ namespace HotelCatalog.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetList([FromQuery]string countryCode, CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<Hotel>>> GetList([FromQuery] string countryCode, CancellationToken cancellationToken)
         {
-            var hotels = await _hotelCatalogService.GetHotels(countryCode, cancellationToken);
+            IEnumerable<Hotel> hotels;
+            try
+            {
+                hotels = await _hotelCatalogService.GetHotelsWithQuery(countryCode, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+
+                _logger.LogError($"Error!! Exception_ {ex.GetType().Name}");
+                _logger.LogError($"Error!! get catalog from state with query: {ex.Message}, retry without it....");
+                _logger.LogError(ex.Message);
+
+                hotels = await _hotelCatalogService.GetHotelsWithFilter(countryCode, cancellationToken);
+
+            }
+
             return Ok(hotels);
         }
 

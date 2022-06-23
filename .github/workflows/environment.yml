@@ -6,7 +6,7 @@ on:
       - 'main'
     paths:
       - 'src/deploy'
-      
+
   workflow_dispatch:
 
 jobs:
@@ -15,8 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       cosmos_url: 'https://demodaprcrd.documents.azure.com:443/ '
-      redis_host: 'dotnet2022redis.redis.cache.windows.net:6380'      
-    needs: CI
+      redis_host: 'dotnet2022redis.redis.cache.windows.net:6380'          
     steps:    
       - uses: actions/checkout@main
       - uses: azure/login@v1
@@ -29,9 +28,7 @@ jobs:
           resourceGroupName: ${{ secrets.AZURE_RG }}
           template: ./deploy/deploy-env-components.json
           parameters: 
-            environment_name=demo             
-            acr_username=${{ secrets.ACR_USERNAME }} 
-            acr_password=${{ secrets.ACR_PASSWORD }} 
+            environment_name=demo                         
             cosmos_masterkey=${{ secrets.AZURE_COSMOS_MASTERKEY }} 
             cosmos_url=${{ env.cosmos_url }}
             servicebus_connectionstring=${{ secrets.AZURE_SERVICEBUS_CONNECTIONSTRING }}

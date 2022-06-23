@@ -2,11 +2,11 @@ name: rater
 
 on:
   push:
-    branches: [ "main" ]
-    paths: 
-    - "src/Rater"
-  pull_request:
-    branches: [ "main" ]
+    branches:    
+      - 'main'
+    paths:
+      - 'src/Rater'
+
   workflow_dispatch:
 
 env:

@@ -13,7 +13,6 @@ namespace HotelCatalog.Services
         public HotelCatalogService(DaprClient daprClient, ILogger<HotelCatalogService> logger)
         {
             _daprClient = daprClient;
-            _logger = logger;
         }
 
         public Task<Hotel> GetHotel(string code, CancellationToken cancellationToken)
@@ -26,22 +25,7 @@ namespace HotelCatalog.Services
             return _daprClient.SaveStateAsync(STORE_NAME, hotel.Code, hotel, cancellationToken: cancellationToken);
         }
 
-        public async Task<IEnumerable<Hotel>> GetHotels(string countryCode, CancellationToken cancellationToken)
-        {
-            try
-            {
-                return await GetHotelsWithQuery(countryCode, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error get catalog from state with query: {ex.Message}, retry without it....");
-
-                return await GetHotelsWithFilter(countryCode, cancellationToken); throw;
-            }
-        }
-
-
-        private async Task<IEnumerable<Hotel>> GetHotelsWithQuery(string countryCode, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Hotel>> GetHotelsWithQuery(string countryCode, CancellationToken cancellationToken)
         {
             var jsonQuery = @$"
             {{
@@ -59,11 +43,13 @@ namespace HotelCatalog.Services
             return queryResponse.Results.Select(x => x.Data);
         }
 
-        private async Task<IEnumerable<Hotel>> GetHotelsWithFilter(string countryCode, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Hotel>> GetHotelsWithFilter(string countryCode, CancellationToken cancellationToken)
         {
             var response = await _daprClient.GetStateAsync<IEnumerable<Hotel>>(STORE_NAME, "hotels", cancellationToken: cancellationToken);
 
-            return response.Where(h => h.CountryCode == countryCode);
+            return response.Any() ?
+                response.Where(h => h.CountryCode == countryCode) :
+                Enumerable.Empty<Hotel>();
         }
     }
 }
