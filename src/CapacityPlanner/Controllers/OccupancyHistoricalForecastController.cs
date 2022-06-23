@@ -23,11 +23,13 @@ namespace CapacityPlanner.Controllers
         [HttpPost]
         public async Task Create([FromBody] OccupancyHistoricalForecast historicalForecast, CancellationToken cancellationToken)
         {
+            if (!historicalForecast.IsValid()) throw new ArgumentException();
+
             var capacityForecastValue = GetCapacityForecastValue(historicalForecast);
             var capacityForecast = new CapacityForecast(historicalForecast.HotelCode, historicalForecast.Date, capacityForecastValue, CONFIDENCE_RATE);
             await _capacityForecastService.SaveCapacityForecast(capacityForecast, cancellationToken);
 
-            _logger.LogTrace($"Hitorical capacity forecast created {capacityForecast.HotelCode} - {capacityForecast.OccupancyPercentage}%");
+            _logger.LogTrace($"Historical capacity forecast created {capacityForecast.HotelCode} - {capacityForecast.OccupancyPercentage}%");
         }
 
         private double GetCapacityForecastValue(OccupancyHistoricalForecast forecast) =>

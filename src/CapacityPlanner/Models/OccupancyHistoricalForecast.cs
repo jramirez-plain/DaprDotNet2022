@@ -1,4 +1,4 @@
-﻿namespace CapacityPlanner.Models
+﻿    namespace CapacityPlanner.Models
 {
     public record OccupancyHistoricalForecast
     {
@@ -10,5 +10,7 @@
         /// </summary>
         public int HistoricalLevel { get; set; }
 
+        public bool IsValid() => Date.Date >= DateTime.Today
+                && (HistoricalLevel >= 0 && HistoricalLevel <= 10);
     }
 }

@@ -23,6 +23,8 @@ namespace CapacityPlanner.Controllers
         [HttpPost]
         public async Task Create(OccupancyReservationTrend reservationTrend, CancellationToken cancellationToken)
         {
+            if (!reservationTrend.IsValid()) throw new ArgumentException();
+
             var capacityForecastValue = await GetCapacityForecastValue(reservationTrend, cancellationToken);
             var capacityForecast = new CapacityForecast(reservationTrend.HotelCode, reservationTrend.Date, capacityForecastValue, CONFIDENCE_RATE);
             await _capacityForecastService.SaveCapacityForecast(capacityForecast, cancellationToken);
@@ -33,7 +35,7 @@ namespace CapacityPlanner.Controllers
         private async Task<double> GetCapacityForecastValue(OccupancyReservationTrend forecast, CancellationToken cancellationToken)
         {
             var totalCapacity = await _capacityForecastService.GetTotalCapacity(forecast.HotelCode, cancellationToken);
-            return forecast.EstimatedReservations / totalCapacity;
+            return forecast.ReservationNumberEstimation / totalCapacity;
         }
     }
 }

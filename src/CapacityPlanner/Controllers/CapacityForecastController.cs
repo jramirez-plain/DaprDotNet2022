@@ -26,6 +26,8 @@ namespace CapacityPlanner.Controllers
             {
                 capacityForecast = CapacityForecast.Default(hotelCode, date);
             }
+            _logger.LogTrace($"Capacity forecast retrieved {capacityForecast.HotelCode} - {capacityForecast.OccupancyPercentage}%");
+
             return Ok(capacityForecast);
         }
 
@@ -33,6 +35,8 @@ namespace CapacityPlanner.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(CapacityForecast capacityForecast, CancellationToken cancellationToken)
         {
+            if (!capacityForecast.IsValid()) throw new ArgumentException();
+
             await _capacityForecastService.SaveCapacityForecast(capacityForecast, cancellationToken);
 
             _logger.LogTrace($"Capacity forecast created {capacityForecast.HotelCode} - {capacityForecast.OccupancyPercentage}%");
