@@ -29,7 +29,11 @@ namespace HotelCatalog.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error get catalog from state with query: {ex.Message}, retry without it....");
+
+                _logger.LogError($"Error!! Exception_ {ex.GetType().Name}");
+                _logger.LogError($"Error!! get catalog from state with query: {ex.Message}, retry without it....");
+                _logger.LogError(ex.Message);
+
                 hotels = await _hotelCatalogService.GetHotelsWithFilter(countryCode, cancellationToken);
 
             }
