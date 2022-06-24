@@ -1,9 +1,0 @@
-apiVersion: dapr.io/v1alpha1
-kind: Component
-metadata:
-  name: inmemory-pubsub
-  namespace: default
-spec:
-  type: pubsub.in-memory
-  version: v1
-  metadata: []
