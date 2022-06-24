@@ -44,7 +44,10 @@ namespace HotelCatalog.Controllers
         [HttpGet("{code}")]
         public async Task<ActionResult<Hotel>> Get(string code, CancellationToken cancellationToken)
         {
-            return NotFound();
+            if (code == "HACK")
+            {
+                return Conflict();
+            }
             // await Task.Delay(10000);
             var hotel = await _hotelCatalogService.GetHotel(code, cancellationToken);
             return Ok(hotel);

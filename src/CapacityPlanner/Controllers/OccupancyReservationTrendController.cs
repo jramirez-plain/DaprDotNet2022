@@ -29,7 +29,7 @@ namespace CapacityPlanner.Controllers
             var capacityForecast = new CapacityForecast(reservationTrend.HotelCode, reservationTrend.Date, capacityForecastValue, CONFIDENCE_RATE);
             await _capacityForecastService.SaveCapacityForecast(capacityForecast, cancellationToken);
 
-            _logger.LogTrace($"Reservation ocupancy updated {capacityForecast.HotelCode} - {capacityForecast.OccupancyPercentage}%");
+            _logger.LogTrace($"Reservation occupancy updated {capacityForecast.HotelCode} - {capacityForecast.OccupancyPercentage}%");
         }
 
         private async Task<double> GetCapacityForecastValue(OccupancyReservationTrend forecast, CancellationToken cancellationToken)
