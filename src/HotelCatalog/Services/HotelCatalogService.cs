@@ -6,11 +6,10 @@ namespace HotelCatalog.Services
     public class HotelCatalogService
     {
         private readonly DaprClient _daprClient;
-        private readonly ILogger<HotelCatalogService> _logger;
-
 
         private string STORE_NAME = "cosmosdb-state"; //"redis-state"; //"blobstorage-state";
-        public HotelCatalogService(DaprClient daprClient, ILogger<HotelCatalogService> logger)
+
+        public HotelCatalogService(DaprClient daprClient)
         {
             _daprClient = daprClient;
         }

@@ -10,11 +10,9 @@ namespace HotelCatalog.Controllers
     {
 
         private readonly HotelCatalogService _hotelCatalogService;
-        private readonly ILogger<HotelsController> _logger;
 
-        public HotelsController(HotelCatalogService hotelCatalogService, ILogger<HotelsController> logger)
+        public HotelsController(HotelCatalogService hotelCatalogService)
         {
-            _logger = logger;
             _hotelCatalogService = hotelCatalogService;
         }
 
@@ -32,7 +30,7 @@ namespace HotelCatalog.Controllers
             {
                 return Conflict();
             }
-            // await Task.Delay(10000);
+
             var hotel = await _hotelCatalogService.GetHotel(code, cancellationToken);
             return Ok(hotel);
         }
@@ -43,17 +41,5 @@ namespace HotelCatalog.Controllers
             await _hotelCatalogService.SaveOrUpdateHotel(hotel, cancellationToken);
             return Ok(hotel);
         }
-
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] Hotel office)
-        //{
-        //}
-
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
-
-        //"blobstorage-state"
     }
 }
