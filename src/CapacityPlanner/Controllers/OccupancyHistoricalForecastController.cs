@@ -1,6 +1,5 @@
 using CapacityPlanner.Models;
 using CapacityPlanner.Services;
-using Dapr;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CapacityPlanner.Controllers

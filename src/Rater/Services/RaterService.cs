@@ -1,5 +1,4 @@
-﻿using Dapr.Client;
-using Rater.Models;
+﻿using Rater.Models;
 using System.Text;
 
 namespace Rater.Services
