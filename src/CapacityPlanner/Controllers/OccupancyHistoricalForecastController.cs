@@ -19,7 +19,6 @@ namespace CapacityPlanner.Controllers
             _logger = logger;
         }
 
-        [Topic("servicebus-pubsub", "capacityforecast", "event.source == \"historical\"", 1)]
         [HttpPost]
         public async Task Create([FromBody] OccupancyHistoricalForecast historicalForecast, CancellationToken cancellationToken)
         {

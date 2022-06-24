@@ -6,12 +6,6 @@ namespace Rater.Services
 {
     public class RaterService
     {
-        private readonly DaprClient _daprClient;
-        public RaterService(DaprClient daprClient)
-        {
-            _daprClient = daprClient;
-        }
-
         public async Task GenerateRates(HotelInfo hotel, DateTime from, DateTime to, CancellationToken cancellationToken)
         {
             var rates = await CalculateRates(hotel, from, to, cancellationToken);
@@ -44,34 +38,17 @@ namespace Rater.Services
 
         public Task<IEnumerable<HotelInfo>> GetHotels(string countryCode, CancellationToken cancellationToken)
         {
-            const string CATALOG = "catalog";
-            const string CATALOG_METHOD = "hotels";
-            return _daprClient.InvokeMethodAsync<IEnumerable<HotelInfo>>(
-                HttpMethod.Get,
-                CATALOG,
-                $"{CATALOG_METHOD}?countryCode={countryCode}",
-                cancellationToken);
+            throw new NotImplementedException();
         }
 
         public Task<HotelInfo> GetHotel(string hotelCode, CancellationToken cancellationToken)
         {
-            const string CATALOG = "catalog";
-            const string CATALOG_METHOD = "hotels";
-            return _daprClient.InvokeMethodAsync<HotelInfo>(
-                HttpMethod.Get,
-                CATALOG,
-                $"{CATALOG_METHOD}/{hotelCode}",
-                cancellationToken);
+            throw new NotImplementedException();
         }
 
         private Task<CapacityForecast> GetHotelCapacityForecast(string hotelCode, DateTime date, CancellationToken cancellationToken)
         {
-            const string CATALOG = "capacityplanner";
-            return _daprClient.InvokeMethodAsync<CapacityForecast>(
-                HttpMethod.Get,
-                CATALOG,
-                $"hotels/{hotelCode}/capacityforecasts/{date.ToString("s")}",
-                cancellationToken);
+            throw new NotImplementedException();
         }
 
         private async Task SendRatesMail(HotelInfo hotel, IEnumerable<Rate> rates)
@@ -96,22 +73,7 @@ namespace Rater.Services
 
         private async Task SendNotification(string from, string to, string subject, string body)
         {
-            string BINDING_NAME = "sendgrid";
-            string BINDING_OPERATION = "create";
-            var metadata = new Dictionary<string, string>()
-            {
-                ["emailTo"] = to,
-                ["emailFrom"] = from,
-                ["subject"] = subject,
-            };
-            try
-            {
-                await _daprClient.InvokeBindingAsync(BINDING_NAME, BINDING_OPERATION, body, metadata);
-            }
-            catch (Exception ex)
-            {
-            }
-
+            throw new NotImplementedException();
         }
     }
 }

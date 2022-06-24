@@ -17,7 +17,6 @@ namespace Rater.Controllers
             _logger = logger;
         }
 
-        [HttpPost("/rater-cron")]
         public async Task<ActionResult> CreateRatesScheduled(CancellationToken cancellationToken)
         {
             try

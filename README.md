@@ -1,9 +1,14 @@
 # DaprDotNet2022
 Dapr example for DotNet2022
 
+# Demo
+Add Dapr to HotelCatalog
+
 # Sample
 
 dapr run --app-id capacityplanner --app-port 5151 --log-as-json --log-level debug --metrics-port 9000 --config C:\Users\crecuero\source\repos\DaprDotNet2022\dapr\configuration\configuration.yaml --components-path C:\Users\crecuero\source\repos\DaprDotNet2022\dapr\components -- dotnet run
+
+dapr run --app-id catalog --app-port 5195 --dapr-grpc-port 50001 --dapr-http-port 3500 --log-as-json --log-level debug --metrics-port 9001 --placement-host-address 127.0.0.1:6050 --config C:\Users\crecuero\source\repos\DaprDotNet2022\dapr\configuration\configuration.yaml --components-path C:\Users\crecuero\source\repos\DaprDotNet2022\dapr\components -- dotnet run
 
 dapr run --app-id catalog --app-port 5195 --dapr-grpc-port 50001 --dapr-http-port 3500 --log-as-json --log-level debug --metrics-port 9001 --placement-host-address 127.0.0.1:6050 --config C:\Users\crecuero\source\repos\DaprDotNet2022\dapr\configuration\configuration.yaml --components-path C:\Users\crecuero\source\repos\DaprDotNet2022\dapr\components -- dotnet run
 
@@ -65,6 +70,12 @@ Direct forecast:
   }
 }
 ```
+
+## Resiliency
+
+To hack the operation:
+
+http://localhost:3500/v1.0/invoke/catalog/method/hotels/HACK
 
 # deploy
 

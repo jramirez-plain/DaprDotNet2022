@@ -1,6 +1,5 @@
 using CapacityPlanner.Models;
 using CapacityPlanner.Services;
-using Dapr;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CapacityPlanner.Controllers
@@ -19,7 +18,6 @@ namespace CapacityPlanner.Controllers
             _logger = logger;
         }
 
-        [Topic("servicebus-pubsub", "capacityforecast", "event.source == \"reservations\"", 2)]
         [HttpPost]
         public async Task Create(OccupancyReservationTrend reservationTrend, CancellationToken cancellationToken)
         {
