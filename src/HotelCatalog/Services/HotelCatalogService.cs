@@ -5,23 +5,14 @@ namespace HotelCatalog.Services
 {
     public class HotelCatalogService
     {
-        private readonly DaprClient _daprClient;
-
-        private string STORE_NAME = "cosmosdb-state"; //"redis-state"; //"blobstorage-state";
-
-        public HotelCatalogService(DaprClient daprClient)
+        public async Task<Hotel> GetHotel(string code, CancellationToken cancellationToken)
         {
-            _daprClient = daprClient;
+            throw new NotImplementedException();
         }
 
-        public Task<Hotel> GetHotel(string code, CancellationToken cancellationToken)
+        public async Task SaveOrUpdateHotel(Hotel hotel, CancellationToken cancellationToken)
         {
-            return _daprClient.GetStateAsync<Hotel>(STORE_NAME, code, cancellationToken: cancellationToken);
-        }
-
-        public Task SaveOrUpdateHotel(Hotel hotel, CancellationToken cancellationToken)
-        {
-            return _daprClient.SaveStateAsync(STORE_NAME, hotel.Code, hotel, cancellationToken: cancellationToken);
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<Hotel>> GetHotels(string countryCode, CancellationToken cancellationToken)
