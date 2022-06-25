@@ -11,6 +11,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelCatalog", "HotelCatalo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rater", "Rater\Rater.csproj", "{58DD55BA-F782-44FA-BCFB-EFBAF1B234F5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4F8ACBCE-2F75-4891-81A8-5F89B340382F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dapper", "dapper", "{61818005-9B99-449E-9013-1E617FF61C26}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{890A39B0-DD6C-4F44-9140-794E06EAC851}"
+	ProjectSection(SolutionItems) = preProject
+		..\dapr\components\azureservicebus-pubsub.yaml = ..\dapr\components\azureservicebus-pubsub.yaml
+		..\dapr\components\cosmosdb-state.yaml = ..\dapr\components\cosmosdb-state.yaml
+		..\dapr\components\local-secret-store.yaml = ..\dapr\components\local-secret-store.yaml
+		..\dapr\components\mystatestore.yaml = ..\dapr\components\mystatestore.yaml
+		..\dapr\components\rater-cron.yaml = ..\dapr\components\rater-cron.yaml
+		..\dapr\components\redis-statestore.yaml = ..\dapr\components\redis-statestore.yaml
+		..\dapr\components\resiliency.yaml = ..\dapr\components\resiliency.yaml
+		..\dapr\components\sendgrid.yaml = ..\dapr\components\sendgrid.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configuration", "configuration", "{14C084F5-9C1E-4FFA-AC33-A7D69C9C1372}"
+	ProjectSection(SolutionItems) = preProject
+		..\dapr\configuration\configuration.yaml = ..\dapr\configuration\configuration.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +57,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E86CDD56-CED8-48D2-A471-0AD2B513F36F} = {4F8ACBCE-2F75-4891-81A8-5F89B340382F}
+		{954D9A27-E82E-4303-968E-129EBDEFA4E1} = {4F8ACBCE-2F75-4891-81A8-5F89B340382F}
+		{58DD55BA-F782-44FA-BCFB-EFBAF1B234F5} = {4F8ACBCE-2F75-4891-81A8-5F89B340382F}
+		{890A39B0-DD6C-4F44-9140-794E06EAC851} = {61818005-9B99-449E-9013-1E617FF61C26}
+		{14C084F5-9C1E-4FFA-AC33-A7D69C9C1372} = {61818005-9B99-449E-9013-1E617FF61C26}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {607FD946-9908-43BD-BA18-68E56F2C10BE}
