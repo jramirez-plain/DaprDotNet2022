@@ -20,9 +20,9 @@ namespace CapacityPlanner
 
             builder.Services.AddControllers();
             builder.Services.AddDaprClient();
-#if DEBUG
-            builder.Services.AddDaprSidekick(configuration);
-#endif
+//#if DEBUG
+//            builder.Services.AddDaprSidekick(configuration);
+//#endif
             builder.Services.AddSingleton<CapacityForecastService>();
 
 
