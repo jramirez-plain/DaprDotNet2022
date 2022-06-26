@@ -29,8 +29,8 @@ spec:
   #        ]
   #      }
   #    ]
-#  - name: enableTLS
-#    value: true
+  - name: enableTLS
+    value: true
 auth:
   secretStore: localsecretstore
 scopes:
