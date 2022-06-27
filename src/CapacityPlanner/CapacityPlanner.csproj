@@ -13,7 +13,7 @@
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
 		<PackageReference Include="Dapr.AspNetCore" Version="1.7.0" />
-		<PackageReference Include="Man.Dapr.Sidekick.AspNetCore" Version="1.1.0" />
+		<!--<PackageReference Include="Man.Dapr.Sidekick.AspNetCore" Version="1.1.0" />-->
 	</ItemGroup>
 
 </Project>

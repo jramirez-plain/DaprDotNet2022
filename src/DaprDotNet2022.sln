@@ -20,7 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", 
 		..\dapr\components\azureservicebus-pubsub.yaml = ..\dapr\components\azureservicebus-pubsub.yaml
 		..\dapr\components\cosmosdb-state.yaml = ..\dapr\components\cosmosdb-state.yaml
 		..\dapr\components\local-secret-store.yaml = ..\dapr\components\local-secret-store.yaml
-		..\dapr\components\mystatestore.yaml = ..\dapr\components\mystatestore.yaml
 		..\dapr\components\rater-cron.yaml = ..\dapr\components\rater-cron.yaml
 		..\dapr\components\redis-statestore.yaml = ..\dapr\components\redis-statestore.yaml
 		..\dapr\components\resiliency.yaml = ..\dapr\components\resiliency.yaml
