@@ -1,5 +1,4 @@
-﻿using Dapr.Client;
-using HotelCatalog.Models;
+﻿using HotelCatalog.Models;
 
 namespace HotelCatalog.Services
 {

@@ -1,8 +1,103 @@
 version: '3.4'
 
 services:
+  ############################################
+  ## CapacityPlanner App + Dapr 
+  ############################################
   capacityplanner:
-    image: ${DOCKER_REGISTRY-}capacityplanner
-    build:
-      context: .
-      dockerfile: CapacityPlanner/Dockerfile
+    build: 
+        context: .
+        dockerfile: CapacityPlanner/Dockerfile
+    ports:
+        - "50001:80"    
+    networks:
+        - dapr-sample-network
+  capacityplanner-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", 
+        "-app-id", "capacityplanner", 
+        "-app-port","80",
+        "-app-ssl",        
+        "-placement-host-address", "placement:50006",
+        #"-dapr-grpc-port", "50002",
+        "-components-path", "/components"]
+    depends_on:
+      - capacityplanner
+    network_mode: "service:capacityplanner"
+    volumes:
+      - "../dapr/components/:/components"
+      - "../dapr/configuration/:/configuration"
+      - "../dapr/assests/:/assests"
+
+
+  ############################################
+  ## Catalog App + Dapr 
+  ############################################
+  catalog:
+    build: 
+        context: .
+        dockerfile: HotelCatalog/Dockerfile
+    ports:
+        - "50002:80"    
+    networks:
+        - dapr-sample-network
+  catalog-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", 
+        "-app-id", "catalog", 
+        "-app-port","80",
+        "-app-ssl",        
+        "-placement-host-address", "placement:50006",
+        #"-dapr-grpc-port", "50002",
+        "-components-path", "/components"]
+    depends_on:
+      - catalog
+    network_mode: "service:catalog"
+    volumes:
+      - "../dapr/components/:/components"
+      - "../dapr/configuration/:/configuration"
+      - "../dapr/assests/:/assests"
+
+  ############################################
+  ## Rater App + Dapr 
+  ############################################
+  rater:
+    build: 
+        context: .
+        dockerfile: Rater/Dockerfile
+    ports:
+        - "50003:80"    
+    networks:
+        - dapr-sample-network
+  rater-dapr:
+    image: "daprio/daprd:latest"
+    command: [ "./daprd", 
+        "-app-id", "rater", 
+        "-app-port","80",
+        "-app-ssl",        
+        "-placement-host-address", "placement:50006",
+        #"-dapr-grpc-port", "50002",
+        "-components-path", "/components"]
+    depends_on:
+      - rater
+    network_mode: "service:rater"
+    volumes:
+      - "../dapr/components/:/components"
+      - "../dapr/configuration/:/configuration"
+      - "../dapr/assests/:/assests"
+      
+
+  ############################
+  # Dapr placement 
+  ############################
+  placement:
+    image: "daprio/dapr"
+    command: ["./placement", "-port", "50006"]
+    ports:
+      - "50006:50006"
+    networks:
+      - dapr-sample-network  
+
+networks:
+    dapr-sample-network:
+    

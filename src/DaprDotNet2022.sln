@@ -32,6 +32,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "configuration", "configurat
 		..\dapr\configuration\configuration.yaml = ..\dapr\configuration\configuration.yaml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{02839A9D-65B7-43DF-A587-705D47E9B5D0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{4E17147F-62DA-4C0B-8721-379F736EC609}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\capacityplanner.yml = ..\.github\workflows\capacityplanner.yml
+		..\.github\workflows\catalog.yml = ..\.github\workflows\catalog.yml
+		..\.github\workflows\environment.yml = ..\.github\workflows\environment.yml
+		..\.github\workflows\rater.yml = ..\.github\workflows\rater.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "arm", "arm", "{947FC20F-49CF-4584-9F45-3E8EE9158F7A}"
+	ProjectSection(SolutionItems) = preProject
+		..\deploy\deploy-app-capacityplanner.json = ..\deploy\deploy-app-capacityplanner.json
+		..\deploy\deploy-app-catalog.json = ..\deploy\deploy-app-catalog.json
+		..\deploy\deploy-app-rater.json = ..\deploy\deploy-app-rater.json
+		..\deploy\deploy-env-components.json = ..\deploy\deploy-env-components.json
+		..\deploy\deploy-redis-search.json = ..\deploy\deploy-redis-search.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +83,8 @@ Global
 		{58DD55BA-F782-44FA-BCFB-EFBAF1B234F5} = {4F8ACBCE-2F75-4891-81A8-5F89B340382F}
 		{890A39B0-DD6C-4F44-9140-794E06EAC851} = {61818005-9B99-449E-9013-1E617FF61C26}
 		{14C084F5-9C1E-4FFA-AC33-A7D69C9C1372} = {61818005-9B99-449E-9013-1E617FF61C26}
+		{4E17147F-62DA-4C0B-8721-379F736EC609} = {02839A9D-65B7-43DF-A587-705D47E9B5D0}
+		{947FC20F-49CF-4584-9F45-3E8EE9158F7A} = {02839A9D-65B7-43DF-A587-705D47E9B5D0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {607FD946-9908-43BD-BA18-68E56F2C10BE}
