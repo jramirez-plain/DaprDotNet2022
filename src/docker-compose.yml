@@ -73,7 +73,7 @@ services:
     image: "daprio/daprd:latest"
     command: [ "./daprd", 
         "-app-id", "rater", 
-        "-app-port","80",
+        "-app-port","443",
         "-app-ssl",        
         "-placement-host-address", "placement:50006",
         #"-dapr-grpc-port", "50002",
