@@ -19,7 +19,6 @@ namespace HotelCatalog
             // Add services to the container.
 
             builder.Services.AddControllers();
-            builder.Services.AddDaprClient();
             builder.Services.AddSingleton<HotelCatalogService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
